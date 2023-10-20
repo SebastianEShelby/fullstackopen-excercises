@@ -19,6 +19,13 @@ const Feedback = ({ feedbacks }) => {
   )
 }
 
+const StatisticLine = ({ text, value }) => {
+
+  return (
+    <p>{text} {value} {text == 'positive' && '%'}</p>
+  )
+}
+
 // displaying the statistics is extracted into its own Statistics component
 const Statistics = ({ good, neutral, bad }) => {
 
@@ -35,12 +42,12 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <>
       <h1>statistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average}</p>
-      <p>positive {positive} %</p>
+      <StatisticLine text='good' value={good} />
+      <StatisticLine text='neutral' value={neutral} />
+      <StatisticLine text='bad' value={bad} />
+      <StatisticLine text='all' value={all} />
+      <StatisticLine text='average' value={average} />
+      <StatisticLine text='positive' value={positive} />
     </>
   )
 }
