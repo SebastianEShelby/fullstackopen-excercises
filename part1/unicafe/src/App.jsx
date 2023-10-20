@@ -19,6 +19,7 @@ const Feedback = ({ feedbacks }) => {
   )
 }
 
+// displaying the statistics is extracted into its own Statistics component
 const Statistics = ({ good, neutral, bad }) => {
 
   const all = good + neutral + bad;
