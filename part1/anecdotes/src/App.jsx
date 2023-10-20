@@ -21,7 +21,6 @@ const App = () => {
   const setSelectedAnectode = () => setSelected(getRandomIndexFromArray(anecdotes.length))
 
   const setVotesForAnecdote = (voteIndex) => {
-    console.log('setVotesForAnecdote')
     const votesCopy = [...votes]
     votesCopy[voteIndex] += 1;
     handleMostVotedAnecdote(voteIndex, votesCopy);
@@ -30,7 +29,6 @@ const App = () => {
 
   const handleMostVotedAnecdote = (newVoteIndex, newVotes) => {
     if (newVotes[newVoteIndex] <= votes[mostVotedIndex]) return;
-    console.log('setMostVotedIndex', newVoteIndex)
     setMostVotedIndex(newVoteIndex);
   }
 
