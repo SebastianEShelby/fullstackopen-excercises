@@ -25,6 +25,7 @@ const Total = ({ parts }) => {
 	)
 }
 
+// Declare the Course component as a separate module, which is imported by the App component.
 const Course = ({ course }) => {
 	return (
 		<div>
