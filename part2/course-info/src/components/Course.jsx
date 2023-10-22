@@ -19,6 +19,7 @@ const Content = ({ parts }) => {
 }
 
 const Total = ({ parts }) => {
+	// calculate the sum of exercises with the array method reduce.
 	return (
 		<p><b>Total of {parts.reduce((prev, curr) => prev + curr.exercises, 0)} exercises</b></p>
 	)
