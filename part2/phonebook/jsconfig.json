@@ -4,5 +4,5 @@
 	  "jsx": "preserve",
 	  "checkJs": true
 	},
-	"exclude": ["node_modules", "**/node_modules/*", "vite.config.js"]
+	"exclude": ["node_modules", "**/node_modules/*", "**/*.js"]
 }
