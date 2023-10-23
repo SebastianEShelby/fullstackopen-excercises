@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import Filter from './components/filter';
 import PersonForm from './components/person-form';
 import Persons from './components/persons';
-import axios from '../node_modules/axios/index';
+// @ts-ignore
+import axios from 'axios';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -14,21 +15,25 @@ const App = () => {
   useEffect(() => {
     axios.get('http://localhost:3001/persons')
       .then(response => {
-        console.log('response.data', response.data);
         setPersons(response.data)
         setFilteredPersons(response.data)
       })
   }, [])
-  console.log('render', persons);
 
   const addName = (event) => {
     event.preventDefault()
     if (isDuplicateName()) return alert(`${newName} is already added to phonebook`)
-    const newPerson = { name: newName, number: newNumber, id: persons.length + 1 }
-    setPersons(persons.concat(newPerson));
-    updateFilteredPersons(newPerson)
-    setNewName('');
-    setNewNumber('');
+    const newPerson = { name: newName, number: newNumber }
+
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPersons(persons.concat(response.data));
+        updateFilteredPersons(response.data)
+        setNewName('');
+        setNewNumber('');
+      })
+
   }
 
   const isDuplicateName = () => {
