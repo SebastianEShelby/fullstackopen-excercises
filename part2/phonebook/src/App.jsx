@@ -21,23 +21,44 @@ const App = () => {
   }, [])
 
   const addName = (event) => {
+    const newPersonObj = { name: newName, number: newNumber }
+
     event.preventDefault()
-    if (isDuplicateName()) return alert(`${newName} is already added to phonebook`)
-    const newPerson = { name: newName, number: newNumber }
 
-    personService
-      .create(newPerson)
-      .then(response => {
-        setPersons(persons.concat(response.data));
-        updateFilteredPersons(response.data)
-        setNewName('');
-        setNewNumber('');
-      })
+    if (isExistingPerson(newPersonObj.name)) {
+      if (!window.confirm(`${newPersonObj.name} is already added to the phonebook, replace the old number with a new one?`)) return;
 
+      const existingPerson = persons.find(person => person.name === newPersonObj.name)
+      const updatedExistingPerson = { ...existingPerson, number: newNumber }
+
+      personService
+        .update(existingPerson.id, updatedExistingPerson)
+        .then(response => {
+          setPersons(persons.map(person => person.id !== response.data.id ? person : updatedExistingPerson));
+          setFilteredPersons(filteredPersons.map(person => person.id !== response.data.id ? person : updatedExistingPerson))
+          clearPersonForm();
+        })
+
+    } else {
+
+
+      personService
+        .create(newPersonObj)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+          updateFilteredPersons(response.data)
+          clearPersonForm();
+        })
+    }
   }
 
-  const isDuplicateName = () => {
-    const isDuplicate = !!persons.find(person => person.name === newName
+  const clearPersonForm = () => {
+    setNewName('');
+    setNewNumber('');
+  }
+
+  const isExistingPerson = (name) => {
+    const isDuplicate = !!persons.find(person => person.name === name
     )
     return isDuplicate ? true : false;
   }

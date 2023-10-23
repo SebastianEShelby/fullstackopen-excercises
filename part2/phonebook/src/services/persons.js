@@ -8,4 +8,6 @@ const create = (newObject) => axios.post(baseUrl, newObject)
 
 const deleteOne = id => axios.delete(`${baseUrl}/${id}`)
 
-export default { getAll, create, deleteOne }
+const update = (id, newObject) => axios.put(`${baseUrl}/${id}`, newObject)
+
+export default { getAll, create, deleteOne, update }
