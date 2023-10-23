@@ -61,6 +61,23 @@ const App = () => {
     isShown ? setFilteredPersons(filteredPersons.concat(newPerson)) : null;
   }
 
+  const handlePersonDelete = (person) => {
+    const { name, id } = person
+    if (!window.confirm(`Delete ${name} ?`)) return
+
+    personService.deleteOne(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+        setFilteredPersons(filteredPersons.filter(filteredPerson => filteredPerson.id !== id))
+      }).catch(() => {
+        alert(
+          `${name} was already deleted`
+        )
+        setPersons(persons.filter(person => person.id !== id))
+        setFilteredPersons(filteredPersons.filter(filteredPerson => filteredPerson.id !== id))
+      })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -68,7 +85,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNewNumber={handleNewNumber} />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} handleDelete={handlePersonDelete} />
     </div>
   )
 }
