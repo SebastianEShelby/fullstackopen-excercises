@@ -8,15 +8,11 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    console.log('effect')
-
-    const eventHandler = response => {
-      console.log('promise fulfilled')
-      setNotes(response.data)
-    }
-
-    const promise = axios.get('http://localhost:3001/notes')
-    promise.then(eventHandler)
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        setNotes(response.data)
+      })
   }, [])
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
