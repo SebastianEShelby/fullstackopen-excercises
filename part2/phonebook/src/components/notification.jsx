@@ -1,9 +1,12 @@
-const Notification = ({ message }) => {
-  if (!message) return null
+import MESSAGE_TYPES from "../constants/notification-message-types"
+
+const Notification = ({ notification }) => {
+  if (!notification || !notification.message) return null
+  const messageColor = notification.type.match(MESSAGE_TYPES.success) ? 'green' : 'red';
 
   return (
-    <div className='success'>
-      {message}
+    <div className='success' style={{ color: messageColor }}>
+      {notification.message}
     </div>
   )
 }

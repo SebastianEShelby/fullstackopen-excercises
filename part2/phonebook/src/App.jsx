@@ -4,6 +4,7 @@ import PersonForm from './components/person-form';
 import Persons from './components/persons';
 import personService from './services/persons'
 import Notification from './components/notification';
+import MESSAGE_TYPES from './constants/notification-message-types'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,7 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [newFilter, setNewFilter] = useState('');
   const [filteredPersons, setFilteredPersons] = useState(persons);
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService
@@ -36,30 +37,19 @@ const App = () => {
       personService
         .update(existingPerson.id, updatedExistingPerson)
         .then(response => {
-          setNotificationMessage(
-            `Updated ${updatedExistingPerson.name}'s phone number to ${updatedExistingPerson.number}`
-          )
-
-          setTimeout(() => {
-            setNotificationMessage('')
-          }, 5000);
-
+          setSuccessNotificaiton(`Updated ${updatedExistingPerson.name}'s phone number to ${updatedExistingPerson.number}`)
           setPersons(persons.map(person => person.id !== response.data.id ? person : updatedExistingPerson));
           setFilteredPersons(filteredPersons.map(person => person.id !== response.data.id ? person : updatedExistingPerson))
           clearPersonForm();
+        }).catch(() => {
+          updateStateForRemovedPerson(existingPerson.id, updatedExistingPerson.name)
         })
 
     } else {
       personService
         .create(newPersonObj)
         .then(response => {
-          setNotificationMessage(
-            `Added ${newPersonObj.name} ${newPersonObj.number ?? ''} `
-          )
-
-          setTimeout(() => {
-            setNotificationMessage('')
-          }, 5000);
+          setSuccessNotificaiton(`Updated ${newPersonObj.name}'s phone number to ${newPersonObj.number}`)
           setPersons(persons.concat(response.data));
           updateFilteredPersons(response.data)
           clearPersonForm();
@@ -103,21 +93,48 @@ const App = () => {
 
     personService.deleteOne(id)
       .then(() => {
+        setSuccessNotificaiton(`${name} was successfully removed`)
         setPersons(persons.filter(person => person.id !== id))
         setFilteredPersons(filteredPersons.filter(filteredPerson => filteredPerson.id !== id))
-      }).catch(() => {
-        alert(
-          `${name} was already deleted`
-        )
-        setPersons(persons.filter(person => person.id !== id))
-        setFilteredPersons(filteredPersons.filter(filteredPerson => filteredPerson.id !== id))
+      }).catch(error => {
+        updateStateForRemovedPerson(id, name)
       })
+  }
+
+  const updateStateForRemovedPerson = (id, name) => {
+    setErrorNotification(`${name} has already been removed from the server`);
+    setPersons(persons.filter(person => person.id !== id))
+    setFilteredPersons(filteredPersons.filter(filteredPerson => filteredPerson.id !== id))
+  }
+
+  const setSuccessNotificaiton = (message, timeout = 5000) => {
+    setNotification(
+      {
+        message: message,
+        type: MESSAGE_TYPES.success
+      }
+    )
+    setTimeout(() => {
+      setNotification(null)
+    }, timeout);
+  }
+
+  const setErrorNotification = (message, timeout = 5000) => {
+    setNotification(
+      {
+        message: message,
+        type: MESSAGE_TYPES.error
+      }
+    )
+    setTimeout(() => {
+      setNotification(null)
+    }, timeout);
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification notification={notification} />
       <Filter newFilter={newFilter} handleNewFilter={handleNewFilter} />
       <h2>add a new</h2>
       <PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNewNumber={handleNewNumber} />
