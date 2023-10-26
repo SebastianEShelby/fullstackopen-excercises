@@ -20,10 +20,14 @@ function App() {
       })
   }
 
+  const handleCountryShow = (country) => {
+    setCountries([country]);
+  }
+
   return (
     <>
       <CountryFilter filter={countryFilter} handleFilter={handleCountryFilter} />
-      <Countries countries={countries} />
+      <Countries countries={countries} handleClick={handleCountryShow} />
     </>
   )
 }

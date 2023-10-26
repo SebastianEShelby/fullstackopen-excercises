@@ -1,6 +1,6 @@
 import { Country } from "./Country";
 
-export const Countries = ({ countries }) => {
+export const Countries = ({ countries, handleClick }) => {
 
   if (!countries.length || countries.length === 0) return null;
 
@@ -13,7 +13,7 @@ export const Countries = ({ countries }) => {
 
   return (
     countries.map(country => {
-      return <p key={country.ccn3}>{country.name.common}</p>
+      return <p key={country.ccn3}>{country.name.common} <button onClick={() => handleClick(country)}>show</button></p>
     })
   )
 }
