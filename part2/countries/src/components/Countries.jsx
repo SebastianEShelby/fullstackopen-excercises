@@ -1,6 +1,6 @@
 import { Country } from "./Country";
 
-export const Countries = ({ countries, handleClick }) => {
+export const Countries = ({ countries, handleClick, weather }) => {
 
   if (!countries.length || countries.length === 0) return null;
 
@@ -8,7 +8,7 @@ export const Countries = ({ countries, handleClick }) => {
 
   if (countries.length === 1)
     return (
-      <Country country={countries[0]} />
+      <Country country={countries[0]} weather={weather} />
     )
 
   return (

@@ -1,4 +1,6 @@
-export const Country = ({ country }) => {
+import Weather from "./Weather"
+
+export const Country = ({ country, weather }) => {
 
   return (
     <>
@@ -13,6 +15,7 @@ export const Country = ({ country }) => {
         })}
       </ul>
       <img style={{ width: 200, height: 200 }} src={country.flags.svg} alt={country.flags.alt} />
+      <Weather country={country} weather={weather} />
     </>
   )
 }
