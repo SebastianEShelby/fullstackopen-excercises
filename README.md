@@ -1,1 +1,1 @@
-initial readme file
+Repo for completing [Fullstackopen](https://fullstackopen.com) excercises - 2023
