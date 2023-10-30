@@ -1,0 +1,2 @@
+// right click -> "Send Request"
+GET http://localhost:3001/api/notes
