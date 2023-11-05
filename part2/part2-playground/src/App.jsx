@@ -1,43 +1,85 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import Note from './components/Note'
+import noteService from './services/notes'
 
 const App = () => {
-  const [value, setValue] = useState('')
-  const [rates, setRates] = useState({})
-  const [currency, setCurrency] = useState(null)
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
-    console.log('effect run, currency is now', currency)
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
+      })
+  }, [])
 
-    // skip if currency is not defined
-    if (currency) {
-      console.log('fetching exchange rates...')
-      axios
-        .get(`https://open.er-api.com/v6/latest/${currency}`)
-        .then(response => {
-          setRates(response.data.rates)
-        })
-    }
-  }, [currency])
-
-  const handleChange = (event) => {
-    setValue(event.target.value)
-  }
-
-  const onSearch = (event) => {
+  const addNote = (event) => {
     event.preventDefault()
-    setCurrency(value)
+    const noteObject = {
+      content: newNote,
+      important: Math.random() > 0.5,
+    }
+
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+        setNewNote('')
+      })
   }
+
+  const toggleImportanceOf = id => {
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+      .catch(error => {
+        alert(
+          `the note '${note.content}' was already deleted from server`
+        )
+        setNotes(notes.filter(n => n.id !== id))
+      })
+  }
+
+  const handleNoteChange = (event) => {
+    setNewNote(event.target.value)
+  }
+
+  const notesToShow = showAll
+    ? notes
+    : notes.filter(note => note.important)
 
   return (
     <div>
-      <form onSubmit={onSearch}>
-        currency: <input value={value} onChange={handleChange} />
-        <button type="submit">exchange rate</button>
+      <h1>Notes</h1>
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all'}
+        </button>
+      </div>
+      <ul>
+        {notesToShow.map(note =>
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
+        )}
+      </ul>
+      <form onSubmit={addNote}>
+        <input
+          value={newNote}
+          onChange={handleNoteChange}
+        />
+        <button type="submit">save</button>
       </form>
-      <pre>
-        {JSON.stringify(rates, null, 2)}
-      </pre>
     </div>
   )
 }
