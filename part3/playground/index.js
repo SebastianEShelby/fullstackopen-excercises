@@ -21,24 +21,6 @@ app.use(express.json())
 app.use(requestLogger);
 app.use(express.static('dist'))
 
-let notes = [
-  {
-    id: 1,
-    content: "HTML is easy",
-    important: true
-  },
-  {
-    id: 2,
-    content: "Browser can execute only JavaScript",
-    important: false
-  },
-  {
-    id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol",
-    important: true
-  }
-]
-
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
@@ -50,52 +32,40 @@ app.get('/api/notes', (request, response) => {
 })
 
 app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const note = notes.find(note => note.id === id)
-
-  if (note) {
+  Note.findById(request.params.id).then(note => {
     response.json(note)
-  } else {
-    response.status(404).end()
-  }
+  }).catch(() => {
+    response.status(404).send('<h1>Note not found!</h1>').end()
+  })
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
 
-  response.status(204).end()
-})
-
-const generateId = () => {
-  const maxId = notes.length > 0
-    // notes.map(n => n.id) creates a new array that contains all the ids of the notes. Math.max returns the maximum value of the numbers that are passed to it. However, notes.map(n => n.id) is an array so it can't directly be given as a parameter to Math.max. The array can be transformed into individual numbers by using the "three dot" spread syntax ....
-    ? Math.max(...notes.map(n => n.id))
-    : 0
-  return maxId + 1
-}
+// app.delete('/api/notes/:id', (request, response) => {
+//   const idToDelete = request.params.id;
+//   console.log('delete', idToDelete);
+//   Note.deleteOne({ id: idToDelete })
+//     .then((res) => {
+//       console.log('res', res)
+//       response.status(204).end()
+//     })
+// })
 
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
-  if (!body.content) {
-    // Notice that calling return is crucial because otherwise the code will execute to the very end and the malformed note gets saved to the application.
-    return response.status(400).json({
-      error: 'content missing'
-    })
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
     important: body.important || false,
-    id: generateId(),
-  }
+  })
 
-  notes = notes.concat(note)
-
-  response.json(note)
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
 })
-
 
 app.use(unknownEndpoint)
 
