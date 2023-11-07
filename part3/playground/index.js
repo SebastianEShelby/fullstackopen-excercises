@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require('express')
 const cors = require('cors')
-require('dotenv').config();
 const app = express();
-app.use(cors())
+app.use(cors());
+const Note = require('./models/note');
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -15,30 +16,6 @@ const requestLogger = (request, response, next) => {
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-
-const mongoose = require('mongoose')
-
-// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
-const url =
-  `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@homebrew.gbcyj2u.mongodb.net/noteApp?retryWrites=true&w=majority`
-
-mongoose.set('strictQuery', false)
-mongoose.connect(url)
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-})
-
-noteSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Note = mongoose.model('Note', noteSchema)
 
 app.use(express.json())
 app.use(requestLogger);
