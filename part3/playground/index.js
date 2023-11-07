@@ -40,15 +40,28 @@ app.get('/api/notes/:id', (request, response, next) => {
 })
 
 
-// app.delete('/api/notes/:id', (request, response) => {
-//   const idToDelete = request.params.id;
-//   console.log('delete', idToDelete);
-//   Note.deleteOne({ id: idToDelete })
-//     .then((res) => {
-//       console.log('res', res)
-//       response.status(204).end()
-//     })
-// })
+app.delete('/api/notes/:id', (request, response, next) => {
+  Note.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
+app.put('/api/notes/:id', (request, response, next) => {
+  const body = request.body
+
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
+
+  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+    .then(updatedNote => {
+      response.json(updatedNote)
+    })
+    .catch(error => next(error))
+})
 
 app.post('/api/notes', (request, response) => {
   const body = request.body
