@@ -9,5 +9,10 @@ Content-Type: application/json
 // You can also add multiple requests in the same file using ### separators:
 
 ###
-@id = 2
-DELETE  http://localhost:3001/api/notes/:{{id}}
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "Another Request",
+    "important": false
+}
