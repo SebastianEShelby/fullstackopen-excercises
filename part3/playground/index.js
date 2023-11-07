@@ -13,13 +13,9 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
+app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger);
-app.use(express.static('dist'))
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -70,6 +66,10 @@ app.post('/api/notes', (request, response) => {
     response.json(savedNote)
   })
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
 
 app.use(unknownEndpoint)
 
