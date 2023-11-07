@@ -22,9 +22,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
-  Note.find({}).then(notes => {
-    response.json(notes)
-  })
+  Note.find({})
+    .then(notes => {
+      response.json(notes)
+    }).catch(error => next(error))
 })
 
 app.get('/api/notes/:id', (request, response, next) => {
@@ -75,9 +76,10 @@ app.post('/api/notes', (request, response) => {
     important: body.important || false,
   })
 
-  note.save().then(savedNote => {
-    response.json(savedNote)
-  })
+  note.save()
+    .then(savedNote => {
+      response.json(savedNote)
+    }).catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
