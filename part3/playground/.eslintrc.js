@@ -22,6 +22,7 @@ module.exports = {
 		'ecmaVersion': 'latest'
 	},
 	'rules': {
+		'eqeqeq': 'error',
 		'indent': [
 			'error',
 			'tab'
