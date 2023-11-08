@@ -1,9 +1,9 @@
-require('dotenv').config();
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const app = express();
-app.use(cors());
-const Note = require('./models/note');
+const app = express()
+app.use(cors())
+const Note = require('./models/note')
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -15,7 +15,7 @@ const requestLogger = (request, response, next) => {
 
 app.use(express.static('dist'))
 app.use(express.json())
-app.use(requestLogger);
+app.use(requestLogger)
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -43,7 +43,7 @@ app.get('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))

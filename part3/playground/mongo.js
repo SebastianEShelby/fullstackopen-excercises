@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-require('dotenv').config();
+require('dotenv').config()
 
 if (!process.env.MONGO_USERNAME || !process.env.MONGO_PASSWORD) {
   console.log('set username and password in .env file')
