@@ -1,13 +1,55 @@
-const mostBlogs = (blogs) => {
-  const blogsByAuthorArr = []
-  let mostBlogsCount = 0
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return null
 
-  if (!blogs.length) return null
+  if (blogs.length === 1) return {
+    author: blogs[0].author,
+    likes: blogs[0].likes
+  }
+
+  const blogsByAuthorArr = []
+  let mostLikesCount = 0
+
+
+
+  blogs.forEach(blog => {
+    if (!blogsByAuthorArr.length) {
+      blogsByAuthorArr.push({
+        author: blog.author,
+        likes: blog.likes
+      })
+      mostLikesCount = blog.likes
+      return
+    }
+
+    const blogByAuthorIndex = blogsByAuthorArr.findIndex(obj => obj.author === blog.author)
+
+    if (blogByAuthorIndex >= 0) {
+      let blogByAuthorLikes = blogsByAuthorArr[blogByAuthorIndex].likes + blog.likes
+      blogsByAuthorArr[blogByAuthorIndex].likes = blogByAuthorLikes
+      if (blogByAuthorLikes > mostLikesCount) mostLikesCount = blogByAuthorLikes
+      return
+    }
+
+    blogsByAuthorArr.push({
+      author: blog.author,
+      likes: blog.likes
+    })
+  })
+
+  return blogsByAuthorArr.find(obj => obj.likes === mostLikesCount)
+}
+
+const mostBlogs = (blogs) => {
+
+  if (blogs.length === 0) return null
 
   if (blogs.length === 1) return {
     author: blogs[0].author,
     blogs: 1
   }
+
+  const blogsByAuthorArr = []
+  let mostBlogsCount = 0
 
   blogs.forEach(blog => {
     if (!blogsByAuthorArr.length) {
@@ -80,5 +122,6 @@ module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
