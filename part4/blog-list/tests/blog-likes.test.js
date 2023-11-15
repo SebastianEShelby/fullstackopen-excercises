@@ -75,18 +75,7 @@ describe('total likes', () => {
 
 describe('favourite blog', () => {
 
-  test('the returned blog object format is correct for list with one item', () => {
-    const result = listHelper.favoriteBlog(listWithOneBlog)
-    expect(result).toEqual(
-      expect.objectContaining({
-        title: expect.any(String),
-        author: expect.any(String),
-        likes: expect.any(Number)
-      })
-    )
-  })
-
-  test('the returned blog object format is correct for larger list', () => {
+  test('the returned blog object format is correct', () => {
     const result = listHelper.favoriteBlog(biggerList)
     expect(result).toEqual(
       expect.objectContaining({
@@ -117,6 +106,41 @@ describe('favourite blog', () => {
       title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
       likes: 12
+    },)
+  })
+
+})
+
+
+describe('most blogs', () => {
+  test('the returned blog object format is correct', () => {
+    const result = listHelper.mostBlogs(biggerList)
+    expect(result).toEqual(
+      expect.objectContaining({
+        author: expect.any(String),
+        blogs: expect.any(Number)
+      })
+    )
+  })
+
+  test('of empty list is null', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toBe(null)
+  })
+
+  test('when list has only one blog, equals that blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    })
+  })
+
+  test('of a bigger list is calculated right', () => {
+    const result = listHelper.mostBlogs(biggerList)
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
     },)
   })
 
