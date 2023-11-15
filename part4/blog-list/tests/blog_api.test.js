@@ -6,7 +6,8 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 
 beforeEach(async () => {
-  await Blog.deleteMany({})
+  const initialBlogs = await helper.blogsInDb()
+  if (initialBlogs.length) await Blog.deleteMany({})
 
   for (let blog of helper.initialBlogs) {
     let blogObj = new Blog(blog)
@@ -57,6 +58,28 @@ test('a valid blog can be added', async () => {
 
 })
 
+test('if the likes property is missing from the request, it will default to the value 0', async () => {
+
+  const blogWithoutLikes = {
+    title: 'Testing blog http post',
+    author: 'John Doe',
+    url: 'https://duckduckgo.com/',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutLikes)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const results = await helper.blogsInDb()
+  const lastItemAdded = results.pop()
+
+  expect(lastItemAdded.likes).toBeDefined()
+  expect(lastItemAdded.likes).toBe(0)
+})
+
 afterAll(async () => {
+  await Blog.deleteMany({})
   await mongoose.connection.close()
 })
