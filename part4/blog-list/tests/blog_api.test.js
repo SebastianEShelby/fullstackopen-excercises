@@ -79,6 +79,42 @@ test('if the likes property is missing from the request, it will default to the 
   expect(lastItemAdded.likes).toBe(0)
 })
 
+test('if the title is missing from the request, backend responds with status code 400 Bad Request', async () => {
+
+  const blogWithoutTitle = {
+    author: 'John Doe',
+    url: 'https://duckduckgo.com/',
+    likes: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutTitle)
+    .expect(400)
+
+  const results = await helper.blogsInDb()
+
+  expect(results).toHaveLength(helper.initialBlogs.length)
+})
+
+test('if the url is missing from the request, backend responds with status code 400 Bad Request', async () => {
+
+  const blogWithoutTitle = {
+    title: 'Missing url',
+    author: 'John Doe',
+    likes: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutTitle)
+    .expect(400)
+
+  const results = await helper.blogsInDb()
+
+  expect(results).toHaveLength(helper.initialBlogs.length)
+})
+
 afterAll(async () => {
   await Blog.deleteMany({})
   await mongoose.connection.close()
