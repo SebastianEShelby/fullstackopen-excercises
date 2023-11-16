@@ -126,6 +126,31 @@ describe('deletion of a note', () => {
   })
 })
 
+describe('updating an existing note', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+
+    const notesAtStart = await helper.notesInDb()
+    const noteToUpdate = notesAtStart[0]
+    const payload = {
+      content: noteToUpdate.content,
+      important: true
+    }
+
+    await api
+      .put(`/api/notes/${noteToUpdate.id}`)
+      .send(payload)
+      .expect(204)
+
+    const notesAtEnd = await helper.notesInDb()
+
+    expect(notesAtEnd).toHaveLength(helper.initialNotes.length)
+
+    const updatedNote = notesAtEnd.find(note => note.id === noteToUpdate.id)
+
+    expect(updatedNote).toEqual({ ...payload, id: noteToUpdate.id })
+  })
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
