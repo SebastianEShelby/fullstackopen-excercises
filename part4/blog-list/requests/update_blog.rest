@@ -1,0 +1,23 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Test Blog",
+  "author": "John Doe",
+  "url": "fakedomain.com",
+  "likes": 10
+}
+
+
+#
+
+@id=6555741c492f3a275b68c41f
+PUT http://localhost:3001/api/blogs/{{id}}
+Content-Type: application/json
+
+{
+  "title": "UPDATED Test Blog",
+  "author": "UPDATED John Doe",
+  "url": "updated.com",
+  "likes": 13
+}

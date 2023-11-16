@@ -133,6 +133,32 @@ test('can delete a single blog post', async () => {
   expect(ids).not.toContain(blogToDelete.id)
 })
 
+test('can update an existing blog post', async () => {
+
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+  const payload = {
+    title: 'UPDATED Test Blog',
+    author: 'UPDATED John Doe',
+    url: 'updated.com',
+    likes: 12
+  }
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(payload)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+  const updatedBlog = blogsAtEnd.find(blog => blog.id === blogToUpdate.id)
+
+  expect(updatedBlog).toEqual({ ...payload, id: blogToUpdate.id })
+})
+
+
 afterAll(async () => {
   await mongoose.connection.close()
 })

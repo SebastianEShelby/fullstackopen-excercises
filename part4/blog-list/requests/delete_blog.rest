@@ -1,2 +1,2 @@
-@id = '6554e489fc3815490b8a6e9e'
-DELETE  http://localhost:3001/api/blogs/:{{id}}
+@id = 6555741c492f3a275b68c41f
+DELETE  http://localhost:3001/api/blogs/{{id}}
