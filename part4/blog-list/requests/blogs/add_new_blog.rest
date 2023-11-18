@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Test Blog",
+  "title": "Test Blog with random user",
   "author": "John Doe",
   "url": "fakedomain.com",
-  "likes": 10
+  "likes": 0
 }
