@@ -26,7 +26,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
-    "mongoose": "^6.12.2"
+    "mongoose": "^7.6.5"
   },
   "jest": {
     "testEnvironment": "node",
