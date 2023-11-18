@@ -1,8 +1,9 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpZCI6IjY1NTdmYjRkMWFjOGMzOTQ4NTAyZjBmNyIsImlhdCI6MTcwMDI2NTk4NX0.yXg0_1PSLUeRmEA3dWwwDKhuan6wlqKsQqnizYFfWg0
 
 {
-  "content": "Ensure that everything still works",
+  "content": "Test Token-based Authentication",
   "important": true,
-  "user": "6557ed2053282a03b509e60b"
+  "user": "6557fb4d1ac8c3948502f0f7"
 }
