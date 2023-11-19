@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1NTgwNmJkZjJiNWQ3ZDM5MjFhMjhmMyIsImlhdCI6MTcwMDQyOTk3Mn0.LH4DB6cVvxm31R02dNDIAErycGJVWGxSlUAj9umJKME
 
 {
-  "title": "Test adding blog with jwt token",
+  "title": "Test adding blog with jwt token using middleware",
   "author": "John Doe",
   "url": "fakedomain.com",
   "likes": 1
