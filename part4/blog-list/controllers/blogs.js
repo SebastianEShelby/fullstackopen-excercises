@@ -9,7 +9,6 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-
   // decodedToken includes username and id fields because that's how the token was signed originally in the login controller
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
@@ -33,6 +32,20 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+  // decodedToken includes username and id fields because that's how the token was signed originally in the login controller
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+
+  if (!user) return response.status(400).json({ error: 'No users found! Please create a user and login first before adding blogs' })
+
+  let blogToDelete = await Blog.findById(request.params.id)
+
+  if (blogToDelete.user.toString() !== user.id) return response.status(401).json({ error: 'Unable to delete this blog since you are NOT the user who created it!' })
+
   await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
 })
