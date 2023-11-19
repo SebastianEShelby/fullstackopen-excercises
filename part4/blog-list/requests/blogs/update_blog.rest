@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1NTgwNmJkZjJiNWQ3ZDM5MjFhMjhmMyIsImlhdCI6MTcwMDQyOTk3Mn0.LH4DB6cVvxm31R02dNDIAErycGJVWGxSlUAj9umJKME
 
 {
-  "title": "Test Blog",
+  "title": "Test adding blog with jwt token using middleware",
   "author": "John Doe",
   "url": "fakedomain.com",
   "likes": 10
@@ -12,13 +12,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
 
 #
 
-@id=6555741c492f3a275b68c41f
+@id=655a8245c8f2fbf9db4e9251
 PUT http://localhost:3001/api/blogs/{{id}}
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1NTgwNmJkZjJiNWQ3ZDM5MjFhMjhmMyIsImlhdCI6MTcwMDQyOTk3Mn0.LH4DB6cVvxm31R02dNDIAErycGJVWGxSlUAj9umJKME
 
 {
-  "title": "UPDATED Test Blog",
+  "title": "Test adding blog with jwt token using middleware",
   "author": "UPDATED John Doe",
   "url": "updated.com",
   "likes": 13
