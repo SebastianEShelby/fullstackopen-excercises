@@ -11,7 +11,7 @@ const errorHandler = (error, request, response, next) => {
   } else if (error.name === 'MongoServerError') {
     return mongodbErrorHelper.handleServerErrors(response, error)
   } else if (error.name === 'JsonWebTokenError') {
-    return response.status(400).json({ error: 'JWT token must be provided with this request' })
+    return response.status(401).json({ error: 'JWT token must be provided with this request' })
   }
 
   next(error)
@@ -33,7 +33,7 @@ const userExtractor = async (request, response, next) => {
   }
 
   const user = await User.findById(decodedToken.id)
-  if (!user) return response.status(400).json({ error: 'user invalid' })
+  if (!user) return response.status(401).json({ error: 'user invalid' })
 
   request.user = user
 
