@@ -11,7 +11,7 @@ const errorHandler = (error, request, response, next) => {
   } else if (error.name === 'MongoServerError') {
     return mongodbErrorHelper.handleServerErrors(response, error)
   } else if (error.name === 'JsonWebTokenError') {
-    return response.status(401).json({ error: 'JWT token must be provided with this request' })
+    return response.status(401).json({ error: 'JWT token missing from request' })
   }
 
   next(error)
