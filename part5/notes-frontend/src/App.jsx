@@ -22,6 +22,14 @@ const App = () => {
       })
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (!loggedUserJSON) return
+    const user = JSON.parse(loggedUserJSON)
+    setUser(user)
+    noteService.setToken(user.token)
+  }, [])
+
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
@@ -67,6 +75,9 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      )
       noteService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -77,6 +88,14 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
+  }
+
+  const logout = () => {
+    window.localStorage.removeItem('loggedNoteappUser')
+    noteService.setToken(null)
+    setUser(null)
+    setUsername('')
+    setPassword('')
   }
 
   const notesToShow = showAll
@@ -110,7 +129,11 @@ const App = () => {
 
   const noteForm = () => (
     <div>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in
+        <button onClick={() => logout()}>
+          logout
+        </button>
+      </p>
       <form onSubmit={addNote}>
         <input
           value={newNote}
