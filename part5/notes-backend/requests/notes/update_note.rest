@@ -1,0 +1,18 @@
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+  "content": "Ensure that everything still works",
+  "important": false
+}
+
+#
+
+@id=65557975d16c31b68fbed888
+PUT http://localhost:3001/api/notes/{{id}}
+Content-Type: application/json
+
+{
+  "content": "Ensure that everything still works",
+  "important": true
+}

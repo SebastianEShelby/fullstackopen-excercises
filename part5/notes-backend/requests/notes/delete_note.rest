@@ -1,0 +1,2 @@
+@id = 6547ffb50089f4696ecde0d6
+DELETE  http://localhost:3001/api/notes/:{{id}}
