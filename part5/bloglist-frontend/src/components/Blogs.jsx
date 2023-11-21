@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Blog from './Blog'
 import blogService from '../services/blogs'
 
-const Blogs = ({ user }) => {
+const Blogs = ({ user, logout }) => {
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
@@ -18,7 +18,12 @@ const Blogs = ({ user }) => {
   return (
     <div>
       <h2>Blogs</h2>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in &nbsp;
+        <button onClick={() => logout()}>
+          logout
+        </button>
+      </p>
+
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}

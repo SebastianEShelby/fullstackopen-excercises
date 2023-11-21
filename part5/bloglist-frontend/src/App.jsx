@@ -39,6 +39,14 @@ const App = () => {
     }
   }
 
+  const logout = () => {
+    window.localStorage.removeItem('LoggedInBlogListUser')
+    blogService.setToken(null)
+    setUser(null)
+    setUsername('')
+    setPassword('')
+  }
+
   return (
     <>
       <Notification message={errorMessage} />
@@ -47,7 +55,7 @@ const App = () => {
         <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin} />
         :
         <>
-          <Blogs user={user} />
+          <Blogs user={user} logout={logout} />
         </>
       }
     </>
