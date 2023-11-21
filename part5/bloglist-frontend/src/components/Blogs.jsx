@@ -3,7 +3,7 @@ import Blog from './Blog'
 import blogService from '../services/blogs'
 import CreateBlog from './CreateBlog'
 
-const Blogs = ({ user, logout }) => {
+const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Blogs = ({ user, logout }) => {
         </button>
       </p>
 
-      <CreateBlog blogs={blogs} setBlogs={setBlogs} />
+      <CreateBlog blogs={blogs} setBlogs={setBlogs} setNotificationWithTimeOut={setNotificationWithTimeOut} />
       <br />
 
       {blogs.map(blog =>

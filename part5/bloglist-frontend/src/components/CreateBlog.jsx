@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
+import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
 
-const CreateBlog = ({ blogs, setBlogs }) => {
+const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -12,7 +13,7 @@ const CreateBlog = ({ blogs, setBlogs }) => {
     setUrl('')
   }
 
-  const createBlog = (event) => {
+  const createBlog = async (event) => {
     event.preventDefault()
 
     const blogObject = {
@@ -21,12 +22,18 @@ const CreateBlog = ({ blogs, setBlogs }) => {
       url
     }
 
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        clearBlogForm()
-      })
+    try {
+
+      const returnedBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(returnedBlog))
+      clearBlogForm()
+
+      setNotificationWithTimeOut(`A new blog "${returnedBlog.title}" ${returnedBlog.author ? `by "${returnedBlog.author}"` : ""} added!`, NOTIFICATION_MESSAGE_TYPES.success)
+
+    } catch (exception) {
+      console.log('exception', exception)
+      setNotificationWithTimeOut(`${exception.response.data.error}`, NOTIFICATION_MESSAGE_TYPES.error)
+    }
   }
 
   return (
