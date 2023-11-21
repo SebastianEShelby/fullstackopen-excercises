@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Blog from './Blog'
 import blogService from '../services/blogs'
+import CreateBlog from './CreateBlog'
 
 const Blogs = ({ user, logout }) => {
   const [blogs, setBlogs] = useState([])
@@ -23,6 +24,9 @@ const Blogs = ({ user, logout }) => {
           logout
         </button>
       </p>
+
+      <CreateBlog blogs={blogs} setBlogs={setBlogs} />
+      <br />
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
