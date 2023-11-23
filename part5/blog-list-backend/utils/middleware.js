@@ -4,7 +4,8 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 const errorHandler = (error, request, response, next) => {
-  logger.error('errorHandler', error.message)
+  logger.error('errorHandler error.name', error.name)
+  logger.error('errorHandler error.message', error.message)
 
   if (error.name === 'ValidationError') {
     return mongodbErrorHelper.handleValidationErrors(response, error)
@@ -12,6 +13,8 @@ const errorHandler = (error, request, response, next) => {
     return mongodbErrorHelper.handleServerErrors(response, error)
   } else if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({ error: 'JWT token missing from request' })
+  } else if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({ error: 'JWT token expired' })
   }
 
   next(error)
