@@ -8,13 +8,14 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const user = request.user
-
   const blog = new Blog({
     ...request.body,
     likes: request.body.likes || 0,
     user: user._id
   })
+
   const savedBlog = await blog.save()
+  savedBlog.populate('user', { username: 1, name: 1, id: 1 })
 
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()

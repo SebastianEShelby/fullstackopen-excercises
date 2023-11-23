@@ -35,7 +35,6 @@ const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut, togglableBlog
       )
 
     } catch (exception) {
-      console.log('exception', exception)
       setNotificationWithTimeOut(`
       ${exception.response.data.error}`,
         NOTIFICATION_MESSAGE_TYPES.error
