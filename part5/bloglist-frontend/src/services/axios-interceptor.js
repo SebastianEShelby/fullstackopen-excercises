@@ -5,10 +5,11 @@ const axiosInterceptor = () => axios.interceptors.response.use(
   response => {
     return response
   },
-  function (error) {
+  (error) => {
     if (
+      error?.response &&
       error.response.status === 401 &&
-      error.response.data.error.toLocaleLowerCase().match('expired')
+      error.response.data?.error.toLocaleLowerCase().match('expired')
     ) {
       window.localStorage.removeItem('LoggedInBlogListUser')
       blogService.setToken(null)
