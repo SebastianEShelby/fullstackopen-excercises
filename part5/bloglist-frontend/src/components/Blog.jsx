@@ -1,6 +1,8 @@
 import { useState } from "react"
+import blogService from '../services/blogs'
+import NOTIFICATION_MESSAGE_TYPES from "../constants/notification-message-types"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs }) => {
   const [isDetailedView, setIsDetailedView] = useState(false)
 
   const toggleIsDetailedView = () => {
@@ -13,12 +15,47 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
 
+  const updateBlogLikes = async (event) => {
+    event.preventDefault()
+
+    const blogObject = {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    }
+
+    try {
+
+      const updatedBlog = await blogService.update(blog.id, blogObject)
+
+      updateBlogs(updatedBlog)
+
+      setNotificationWithTimeOut(
+        `Blog "${updatedBlog.title}" ${updatedBlog.author ? `by "${updatedBlog.author}"` : ""} likes updated to ${updatedBlog.likes}`,
+        NOTIFICATION_MESSAGE_TYPES.success
+      )
+
+    } catch (exception) {
+      setNotificationWithTimeOut(`
+      ${exception.response.data.error}`,
+        NOTIFICATION_MESSAGE_TYPES.error
+      )
+    }
+  }
+
   return (
     <div style={blogStyle}>
       <>{blog.title} {blog.author} <button onClick={toggleIsDetailedView}>{isDetailedView ? "hide" : "view"}</button></>
       <div style={{ display: isDetailedView ? "" : "none" }}>
         {blog.url ? <p>Url: {blog.url}</p> : null}
-        {blog.likes !== (null || undefined) ? <p>Likes: {blog.likes} <button>like</button></p> : null}
+        {blog.likes !== (null || undefined) ?
+          <p>Likes: {blog.likes}
+            &nbsp;<button onClick={updateBlogLikes}>like</button>
+          </p>
+          : null
+        }
         {blog.user.name ? <p>User: {blog.user.name}</p> : null}
       </div >
     </div>

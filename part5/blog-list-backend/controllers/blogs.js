@@ -51,7 +51,7 @@ blogsRouter.put('/:id', async (request, response) => {
   user.blogs = user.blogs.concat(updatedBlog._id)
   await user.save()
 
-  response.status(204).json(updatedBlog)
+  response.status(201).json(updatedBlog)
 })
 
 module.exports = blogsRouter
