@@ -13,7 +13,7 @@ const axiosInterceptor = () => axios.interceptors.response.use(
     ) {
       window.localStorage.removeItem('LoggedInBlogListUser')
       blogService.setToken(null)
-      window.location.reload();
+      window.location.reload()
       return Promise.reject(error)
     }
 

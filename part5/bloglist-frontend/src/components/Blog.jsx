@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 import blogService from '../services/blogs'
-import NOTIFICATION_MESSAGE_TYPES from "../constants/notification-message-types"
+import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
 
 const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterDelete, user }) => {
   const [isDetailedView, setIsDetailedView] = useState(false)
@@ -9,7 +9,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
   }
 
   const blogStyle = {
-    padding: "10px 10px",
+    padding: '10px 10px',
     border: '1px solid black',
     marginBottom: 5
   }
@@ -32,14 +32,14 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
       updateBlogs(updatedBlog)
 
       setNotificationWithTimeOut(
-        `Blog "${updatedBlog.title}" ${updatedBlog.author ? `by "${updatedBlog.author}"` : ""} likes updated to ${updatedBlog.likes}`,
+        `Blog "${updatedBlog.title}" ${updatedBlog.author ? `by "${updatedBlog.author}"` : ''} likes updated to ${updatedBlog.likes}`,
         NOTIFICATION_MESSAGE_TYPES.success
       )
 
     } catch (exception) {
       setNotificationWithTimeOut(`
       ${exception.response.data.error}`,
-        NOTIFICATION_MESSAGE_TYPES.error
+      NOTIFICATION_MESSAGE_TYPES.error
       )
     }
   }
@@ -60,14 +60,14 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
       updateBlogsAfterDelete(blogToDelete.id)
 
       setNotificationWithTimeOut(
-        `Blog "${blogToDelete.title}" ${blogToDelete.author ? `by "${blogToDelete.author}"` : ""} was deleted!`,
+        `Blog "${blogToDelete.title}" ${blogToDelete.author ? `by "${blogToDelete.author}"` : ''} was deleted!`,
         NOTIFICATION_MESSAGE_TYPES.success
       )
 
     } catch (exception) {
       setNotificationWithTimeOut(`
       ${exception.response.data.error}`,
-        NOTIFICATION_MESSAGE_TYPES.error
+      NOTIFICATION_MESSAGE_TYPES.error
       )
     }
 
@@ -75,8 +75,8 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
 
   return (
     <div style={blogStyle}>
-      <>{blog.title} {blog.author} <button onClick={toggleIsDetailedView}>{isDetailedView ? "hide" : "view"}</button></>
-      <div style={{ display: isDetailedView ? "" : "none" }}>
+      <>{blog.title} {blog.author} <button onClick={toggleIsDetailedView}>{isDetailedView ? 'hide' : 'view'}</button></>
+      <div style={{ display: isDetailedView ? '' : 'none' }}>
         {blog.url ? <p>Url: {blog.url}</p> : null}
         {blog.likes !== (null || undefined) ?
           <p>Likes: {blog.likes}

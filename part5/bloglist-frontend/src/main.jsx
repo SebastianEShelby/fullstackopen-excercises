@@ -3,6 +3,6 @@ import App from './App'
 import '../index.css'
 import axiosInterceptor from './services/axios-interceptor'
 
-axiosInterceptor();
+axiosInterceptor()
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)

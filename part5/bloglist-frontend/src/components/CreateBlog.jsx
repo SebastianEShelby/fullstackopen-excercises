@@ -30,14 +30,14 @@ const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut, togglableBlog
       togglableBlogRef.current.toggleVisibility()
 
       setNotificationWithTimeOut(
-        `A new blog "${returnedBlog.title}" ${returnedBlog.author ? `by "${returnedBlog.author}"` : ""} added!`,
+        `A new blog "${returnedBlog.title}" ${returnedBlog.author ? `by "${returnedBlog.author}"` : ''} added!`,
         NOTIFICATION_MESSAGE_TYPES.success
       )
 
     } catch (exception) {
       setNotificationWithTimeOut(`
       ${exception.response.data.error}`,
-        NOTIFICATION_MESSAGE_TYPES.error
+      NOTIFICATION_MESSAGE_TYPES.error
       )
     }
   }
