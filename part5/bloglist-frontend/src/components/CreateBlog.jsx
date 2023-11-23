@@ -2,7 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
 
-const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut }) => {
+const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut, togglableBlogRef }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -27,6 +27,7 @@ const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut }) => {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
       clearBlogForm()
+      togglableBlogRef.current.toggleVisibility()
 
       setNotificationWithTimeOut(
         `A new blog "${returnedBlog.title}" ${returnedBlog.author ? `by "${returnedBlog.author}"` : ""} added!`,

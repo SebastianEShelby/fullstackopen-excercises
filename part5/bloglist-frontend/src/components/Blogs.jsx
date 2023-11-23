@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Blog from './Blog'
 import blogService from '../services/blogs'
 import CreateBlog from './CreateBlog'
+import Togglable from './Togglable'
 
 const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
   const [blogs, setBlogs] = useState([])
+  const togglableBlogRef = useRef()
 
   useEffect(() => {
     blogService
@@ -25,7 +27,10 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
         </button>
       </p>
 
-      <CreateBlog blogs={blogs} setBlogs={setBlogs} setNotificationWithTimeOut={setNotificationWithTimeOut} />
+      <Togglable buttonLabel="create new blog" ref={togglableBlogRef}>
+        <CreateBlog blogs={blogs} setBlogs={setBlogs} setNotificationWithTimeOut={setNotificationWithTimeOut} togglableBlogRef={togglableBlogRef} />
+      </Togglable>
+
       <br />
 
       {blogs.map(blog =>
