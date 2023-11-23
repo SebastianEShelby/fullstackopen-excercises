@@ -2,9 +2,8 @@ import { useState } from "react"
 import blogService from '../services/blogs'
 import NOTIFICATION_MESSAGE_TYPES from "../constants/notification-message-types"
 
-const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs }) => {
+const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterDelete, user }) => {
   const [isDetailedView, setIsDetailedView] = useState(false)
-
   const toggleIsDetailedView = () => {
     setIsDetailedView(!isDetailedView)
   }
@@ -45,6 +44,35 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs }) => {
     }
   }
 
+  const deleteBlog = async (event) => {
+    event.preventDefault()
+
+    if (!window.confirm(
+      `Removing blog ${blog.name} by ${blog.author}. Are you sure?`
+    )) return
+
+    const blogToDelete = blog
+
+    try {
+
+      await blogService.remove(blogToDelete.id)
+
+      updateBlogsAfterDelete(blogToDelete.id)
+
+      setNotificationWithTimeOut(
+        `Blog "${blogToDelete.title}" ${blogToDelete.author ? `by "${blogToDelete.author}"` : ""} was deleted!`,
+        NOTIFICATION_MESSAGE_TYPES.success
+      )
+
+    } catch (exception) {
+      setNotificationWithTimeOut(`
+      ${exception.response.data.error}`,
+        NOTIFICATION_MESSAGE_TYPES.error
+      )
+    }
+
+  }
+
   return (
     <div style={blogStyle}>
       <>{blog.title} {blog.author} <button onClick={toggleIsDetailedView}>{isDetailedView ? "hide" : "view"}</button></>
@@ -57,6 +85,13 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs }) => {
           : null
         }
         {blog.user.name ? <p>User: {blog.user.name}</p> : null}
+
+        {blog.user.username === user.username ?
+          <button style={{ 'color': 'red' }} onClick={deleteBlog}>remove</button>
+          :
+          null
+        }
+
       </div >
     </div>
   )

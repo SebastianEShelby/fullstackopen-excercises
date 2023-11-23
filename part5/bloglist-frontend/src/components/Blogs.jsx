@@ -20,6 +20,10 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
     setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
   }
 
+  const updateBlogsAfterDelete = (deletedBlogId) => {
+    setBlogs(blogs.filter(blog => blog.id !== deletedBlogId))
+  }
+
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   if (!blogs || blogs.length < 1) return <h2>No blogs found</h2>
@@ -40,7 +44,7 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
       <br />
 
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlogs={updateBlogs} setNotificationWithTimeOut={setNotificationWithTimeOut} />
+        <Blog key={blog.id} blog={blog} updateBlogs={updateBlogs} updateBlogsAfterDelete={updateBlogsAfterDelete} setNotificationWithTimeOut={setNotificationWithTimeOut} user={user} />
       )}
     </div>
   )
