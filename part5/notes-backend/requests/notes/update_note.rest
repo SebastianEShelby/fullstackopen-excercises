@@ -8,11 +8,11 @@ Content-Type: application/json
 
 #
 
-@id=65557975d16c31b68fbed888
+@id=655e8b30c43228e0c319b343
 PUT http://localhost:3001/api/notes/{{id}}
 Content-Type: application/json
 
 {
-  "content": "Ensure that everything still works",
+  "content": "test after refactor",
   "important": true
 }
