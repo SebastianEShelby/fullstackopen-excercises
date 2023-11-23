@@ -28,11 +28,17 @@ const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut }) => {
       setBlogs(blogs.concat(returnedBlog))
       clearBlogForm()
 
-      setNotificationWithTimeOut(`A new blog "${returnedBlog.title}" ${returnedBlog.author ? `by "${returnedBlog.author}"` : ""} added!`, NOTIFICATION_MESSAGE_TYPES.success)
+      setNotificationWithTimeOut(
+        `A new blog "${returnedBlog.title}" ${returnedBlog.author ? `by "${returnedBlog.author}"` : ""} added!`,
+        NOTIFICATION_MESSAGE_TYPES.success
+      )
 
     } catch (exception) {
       console.log('exception', exception)
-      setNotificationWithTimeOut(`${exception.response.data.error}`, NOTIFICATION_MESSAGE_TYPES.error)
+      setNotificationWithTimeOut(`
+      ${exception.response.data.error}`,
+        NOTIFICATION_MESSAGE_TYPES.error
+      )
     }
   }
 
