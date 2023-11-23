@@ -38,8 +38,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
 
     } catch (exception) {
       setNotificationWithTimeOut(`
-      ${exception.response.data.error}`,
-      NOTIFICATION_MESSAGE_TYPES.error
+      ${exception.response.data.error}`, NOTIFICATION_MESSAGE_TYPES.error
       )
     }
   }
@@ -66,8 +65,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
 
     } catch (exception) {
       setNotificationWithTimeOut(`
-      ${exception.response.data.error}`,
-      NOTIFICATION_MESSAGE_TYPES.error
+      ${exception.response.data.error}`, NOTIFICATION_MESSAGE_TYPES.error
       )
     }
 
@@ -85,7 +83,6 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
           : null
         }
         {blog.user.name ? <p>User: {blog.user.name}</p> : null}
-
         {blog.user.username === user.username ?
           <button style={{ 'color': 'red' }} onClick={deleteBlog}>remove</button>
           :
