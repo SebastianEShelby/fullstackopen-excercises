@@ -8,7 +8,7 @@ describe('<Blog />', () => {
   const user = {
     username: 'john',
     name: 'John Doe',
-    id: '655806bdf2b5d7d3921a28f3'
+    id: '1111'
   }
   const blog = {
     title: 'Test blog',
@@ -16,7 +16,7 @@ describe('<Blog />', () => {
     url: 'fakedomain.com',
     likes: 1,
     user: user,
-    id: '655d060a2eb81ef851db56b5'
+    id: '2222'
   }
 
   test('only renders blog title and author by default ', () => {
