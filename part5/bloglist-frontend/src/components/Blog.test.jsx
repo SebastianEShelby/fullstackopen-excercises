@@ -5,22 +5,17 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
-  let user
-  let blog
-
-  beforeEach(() => {
-    user = {
-      username: 'john',
-      name: 'John Doe',
-    }
-    blog = {
-      title: 'Test blog',
-      author: 'author',
-      url: 'fakedomain.com',
-      likes: 1,
-      user: user
-    }
-  })
+  const user = {
+    username: 'john',
+    name: 'John Doe',
+  }
+  const blog = {
+    title: 'Test blog',
+    author: 'author',
+    url: 'fakedomain.com',
+    likes: 1,
+    user: user
+  }
 
   test('only renders blog title and author by default ', () => {
     render(<Blog blog={blog} user={user} />)
