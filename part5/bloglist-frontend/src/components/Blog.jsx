@@ -38,7 +38,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
 
     } catch (exception) {
       setNotificationWithTimeOut(`
-      ${exception.response.data.error}`, NOTIFICATION_MESSAGE_TYPES.error
+      ${exception?.response?.data?.error ?? 'server error'}`, NOTIFICATION_MESSAGE_TYPES.error
       )
     }
   }
@@ -78,7 +78,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
         {blog.url ? <p>Url: {blog.url}</p> : null}
         {blog.likes !== (null || undefined) ?
           <p>Likes: {blog.likes}
-            &nbsp;<button onClick={updateBlogLikes}>like</button>
+            &nbsp;<button data-testid="update-blog-likes" onClick={updateBlogLikes}>like</button>
           </p>
           : null
         }
