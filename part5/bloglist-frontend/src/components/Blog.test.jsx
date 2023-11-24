@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
 
-test('renders content', () => {
+test('only renders blog title and author by default ', () => {
 
   const setNotificationWithTimeOut = jest.fn()
   const updateBlogs = jest.fn()
