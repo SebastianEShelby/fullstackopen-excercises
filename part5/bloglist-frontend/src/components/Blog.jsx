@@ -73,7 +73,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
 
   return (
     <div style={blogStyle} data-testid="blog">
-      <>{blog.title} {blog.author} <button onClick={toggleIsDetailedView}>{isDetailedView ? 'hide' : 'view'}</button></>
+      <>{blog.title} {blog.author} <button data-testid="view-blog-details" onClick={toggleIsDetailedView}>{isDetailedView ? 'hide' : 'view'}</button></>
       <div data-testid="blog-details" style={{ display: isDetailedView ? '' : 'none' }}>
         {blog.url ? <p>Url: {blog.url}</p> : null}
         {blog.likes !== (null || undefined) ?
