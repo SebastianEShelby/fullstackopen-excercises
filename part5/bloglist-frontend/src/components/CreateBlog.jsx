@@ -35,9 +35,7 @@ const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut, togglableBlog
       )
 
     } catch (exception) {
-      setNotificationWithTimeOut(`
-      ${exception.response.data.error}`,
-      NOTIFICATION_MESSAGE_TYPES.error
+      setNotificationWithTimeOut(`${exception?.response?.data?.error ?? 'server error'}`, NOTIFICATION_MESSAGE_TYPES.error
       )
     }
   }
@@ -46,13 +44,13 @@ const CreateBlog = ({ blogs, setBlogs, setNotificationWithTimeOut, togglableBlog
     <>
       <h2>Create New</h2>
       <form onSubmit={createBlog}>
-        Title: <input type="text" name="title" value={title} onChange={({ target }) => setTitle(target.value)} />
+        Title: <input data-testid="title" type="text" name="title" value={title} onChange={({ target }) => setTitle(target.value)} />
         <br />
-        Author: <input type="text" name="author" value={author} onChange={({ target }) => setAuthor(target.value)} />
+        Author: <input data-testid="author" type="text" name="author" value={author} onChange={({ target }) => setAuthor(target.value)} />
         <br />
-        Url: <input type="text" name="url" value={url} onChange={({ target }) => setUrl(target.value)} />
+        Url: <input data-testid="url" type="text" name="url" value={url} onChange={({ target }) => setUrl(target.value)} />
         <br />
-        <button type="submit">create</button>
+        <button data-testid="create-blog" type="submit">create</button>
       </form>
     </>
   )
