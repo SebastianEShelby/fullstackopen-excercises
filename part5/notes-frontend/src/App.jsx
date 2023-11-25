@@ -95,7 +95,7 @@ const App = () => {
     : notes.filter(note => note.important)
 
   const loginForm = () => (
-    <Togglable buttonLabel='login'>
+    <Togglable buttonLabel='log in'>
       <LoginForm
         username={username}
         password={password}
@@ -108,7 +108,7 @@ const App = () => {
 
   const noteForm = () => (
     <>
-      <button onClick={logout}>logout</button>
+      <button onClick={logout}>log out</button>
       <br />  <br />
       <Togglable buttonLabel='new note' ref={noteFormRef}>
         <NoteForm createNote={createNote} />
