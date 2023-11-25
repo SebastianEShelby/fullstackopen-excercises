@@ -70,24 +70,26 @@ describe('Blog app', function () {
 
 
     describe('and several blogs exist', function () {
+      const blogs = [
+        {
+          title: 'Go To Statement Considered Harmful',
+          author: 'Edsger W. Dijkstra',
+          url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+          likes: 5
+        },
+        {
+          title: 'React patterns',
+          author: 'Michael Chan',
+          url: 'https://reactpatterns.com/',
+          likes: 10
+        },
+        {
+          title: 'Canonical string reduction',
+          author: 'Edsger W. Dijkstra',
+          url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+        },
+      ]
       beforeEach(function () {
-        const blogs = [
-          {
-            title: 'React patterns',
-            author: 'Michael Chan',
-            url: 'https://reactpatterns.com/',
-          },
-          {
-            title: 'Go To Statement Considered Harmful',
-            author: 'Edsger W. Dijkstra',
-            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-          },
-          {
-            title: 'Canonical string reduction',
-            author: 'Edsger W. Dijkstra',
-            url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-          },
-        ]
         cy.login({ username: user.username, password: user.password })
         cy.createBlog(blogs[0])
         cy.createBlog(blogs[1])
@@ -95,24 +97,29 @@ describe('Blog app', function () {
       })
 
       it('one of those can be liked', function () {
-        cy.get('[data-testid="blogs"]').contains('Canonical string reduction').as('blog')
+        const originalLikes = blogs[2].likes || 0
+        cy.get('[data-testid="blogs"]').contains(blogs[2].title).as('blog')
 
         cy.get('@blog').find('button').contains('view').click()
         cy.get('@blog').find('button').contains('like').click()
-        cy.get('@blog').contains('Likes').contains(1)
+        cy.get('@blog').contains('Likes').contains(originalLikes + 1)
       })
 
       it('one of those can be deleted by the user who created it', function () {
-        cy.get('[data-testid="blogs"]').contains('Canonical string reduction').as('blog')
+        cy.get('[data-testid="blogs"]').contains(blogs[2].title).as('blog')
 
         cy.get('@blog').find('button').contains('view').click()
         cy.get('@blog').find('button').contains('remove').click()
         cy.get('@blog').should('not.exist')
       })
+
+      it('blogs are ordered according to likes with the blog with the most likes being first', function () {
+        cy.get('[data-testid="blog"]').should('have.length', 3)
+        cy.get('[data-testid="blog"]').eq(0).should('contain', blogs[1].title)
+        cy.get('[data-testid="blog"]').eq(1).should('contain', blogs[0].title)
+        cy.get('[data-testid="blog"]').eq(2).should('contain', blogs[2].title)
+      })
     })
-
-
-
   })
 
   it('only the creator can see the delete button of a blog, not anyone else', function () {

@@ -37,11 +37,11 @@ Cypress.Commands.add('logout', () => {
   window.localStorage.removeItem('LoggedInBlogListUser')
 })
 
-Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+Cypress.Commands.add('createBlog', ({ title, author, url, likes = 0 }) => {
   cy.request({
     url: `${Cypress.env('BACKEND')}/blogs`,
     method: 'POST',
-    body: { title, author, url },
+    body: { title, author, url, likes },
     headers: {
       'Authorization': `Bearer ${JSON.parse(localStorage.getItem('LoggedInBlogListUser')).token}`
     }
