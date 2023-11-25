@@ -6,7 +6,7 @@ export const Login = ({ username, password, setUsername, setPassword, handleLogi
         <div>
           username
           <input
-            id="username"
+            data-testid="username"
             type="text"
             value={username}
             name="Username"
@@ -16,14 +16,14 @@ export const Login = ({ username, password, setUsername, setPassword, handleLogi
         <div>
           password
           <input
-            id="password"
+            data-testid="password"
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button id="login-button" type="submit">login</button>
+        <button data-testid="login-button" type="submit">login</button>
       </form>
     </>
   )

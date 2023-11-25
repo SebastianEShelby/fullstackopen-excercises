@@ -28,7 +28,7 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   return (
-    <div>
+    <div data-testid="blogs">
       {
         isBlogs
           ? <h2>Blogs</h2>

@@ -12,9 +12,9 @@ describe('Blog app', function () {
   })
 
   it('Login form is shown', function () {
-    cy.get('#username').should('be.visible')
-    cy.get('#password').should('be.visible')
-    cy.get('#login-button').should('be.visible')
+    cy.get('[data-testid="username"]').should('be.visible')
+    cy.get('[data-testid="password"]').should('be.visible')
+    cy.get('[data-testid="login-button"]').should('be.visible')
   })
 
 
@@ -25,9 +25,9 @@ describe('Blog app', function () {
         password: user.password
       }
 
-      cy.get('#username').type(validLogin.username)
-      cy.get('#password').type(validLogin.password)
-      cy.get('#login-button').click()
+      cy.get('[data-testid="username"]').type(validLogin.username)
+      cy.get('[data-testid="password"]').type(validLogin.password)
+      cy.get('[data-testid="login-button"]').click()
 
       cy.get('.notification')
         .should('contain', `${user.name} logged in!`)
@@ -42,9 +42,9 @@ describe('Blog app', function () {
         password: 'wrongpassword'
       }
 
-      cy.get('#username').type(invalidLogin.username)
-      cy.get('#password').type(invalidLogin.password)
-      cy.get('#login-button').click()
+      cy.get('[data-testid="username"]').type(invalidLogin.username)
+      cy.get('[data-testid="password"]').type(invalidLogin.password)
+      cy.get('[data-testid="login-button"]').click()
 
       cy.get('.notification')
         .should('contain', 'Wrong credentials')
@@ -69,7 +69,7 @@ describe('Blog app', function () {
     })
 
 
-    describe.only('and several blogs exist', function () {
+    describe('and several blogs exist', function () {
       beforeEach(function () {
         const blogs = [
           {
@@ -95,11 +95,19 @@ describe('Blog app', function () {
       })
 
       it('one of those can be liked', function () {
-        cy.contains('Canonical string reduction').parent().as('blog')
+        cy.get('[data-testid="blogs"]').contains('Canonical string reduction').as('blog')
 
         cy.get('@blog').find('button').contains('view').as('viewButton').click()
         cy.get('@blog').find('button').contains('like').as('likeButton').click()
         cy.get('@blog').contains('Likes').contains(1)
+      })
+
+      it.only('one of those can be deleted by the user who created it', function () {
+        cy.get('[data-testid="blogs"]').contains('Canonical string reduction').as('blog')
+
+        cy.get('@blog').find('button').contains('view').as('viewButton').click()
+        cy.get('@blog').find('button').contains('remove').as('removeButton').click()
+        cy.get('@blog').should('not.exist')
       })
     })
 
