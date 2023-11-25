@@ -7,7 +7,6 @@ describe('Blog app', function () {
 
   beforeEach(function () {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
-
     cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
     cy.visit('')
   })
@@ -51,6 +50,22 @@ describe('Blog app', function () {
         .should('contain', 'Wrong credentials')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
         .and('have.css', 'border-style', 'solid')
+    })
+  })
+
+  describe.only('When logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: user.username, password: user.password })
+    })
+
+    it('A blog can be created', function () {
+      cy.get('button').contains('create new blog').click()
+      cy.get('[data-testid="title"]').should('be.visible').type('Title')
+      cy.get('[data-testid="author"]').should('be.visible').type('John Doe')
+      cy.get('[data-testid="url"]').should('be.visible').type('fake@domain.com')
+
+      cy.get('[data-testid="create-blog"]').click()
+      cy.contains('Title John Doe')
     })
   })
 })

@@ -7,6 +7,7 @@ import Togglable from './Togglable'
 const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
   const [blogs, setBlogs] = useState([])
   const togglableBlogRef = useRef()
+  const isBlogs = blogs && blogs.length > 0
 
   useEffect(() => {
     blogService
@@ -26,11 +27,13 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
 
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
-  if (!blogs || blogs.length < 1) return <h2>No blogs found</h2>
-
   return (
     <div>
-      <h2>Blogs</h2>
+      {
+        isBlogs
+          ? <h2>Blogs</h2>
+          : <h2>No blogs found</h2>
+      }
       <p>{user.name} logged in &nbsp;
         <button onClick={() => logout()}>
           logout
@@ -42,10 +45,14 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
       </Togglable>
 
       <br />
+      {
+        isBlogs
+          ? sortedBlogs.map(blog =>
+            <Blog key={blog.id} blog={blog} updateBlogs={updateBlogs} updateBlogsAfterDelete={updateBlogsAfterDelete} setNotificationWithTimeOut={setNotificationWithTimeOut} user={user} />
+          )
+          : null
+      }
 
-      {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlogs={updateBlogs} updateBlogsAfterDelete={updateBlogsAfterDelete} setNotificationWithTimeOut={setNotificationWithTimeOut} user={user} />
-      )}
     </div>
   )
 }
