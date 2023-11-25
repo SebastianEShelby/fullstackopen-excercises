@@ -53,7 +53,7 @@ describe('Blog app', function () {
     })
   })
 
-  describe.only('When logged in', function () {
+  describe('When logged in', function () {
     beforeEach(function () {
       cy.login({ username: user.username, password: user.password })
     })
@@ -67,5 +67,41 @@ describe('Blog app', function () {
       cy.get('[data-testid="create-blog"]').click()
       cy.contains('Title John Doe')
     })
+
+
+    describe.only('and several blogs exist', function () {
+      beforeEach(function () {
+        const blogs = [
+          {
+            title: 'React patterns',
+            author: 'Michael Chan',
+            url: 'https://reactpatterns.com/',
+          },
+          {
+            title: 'Go To Statement Considered Harmful',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+          },
+          {
+            title: 'Canonical string reduction',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+          },
+        ]
+        cy.login({ username: user.username, password: user.password })
+        cy.createBlog(blogs[0])
+        cy.createBlog(blogs[1])
+        cy.createBlog(blogs[2])
+      })
+
+      it('one of those can be liked', function () {
+        cy.contains('Canonical string reduction').parent().as('blog')
+
+        cy.get('@blog').find('button').contains('view').as('viewButton').click()
+        cy.get('@blog').find('button').contains('like').as('likeButton').click()
+        cy.get('@blog').contains('Likes').contains(1)
+      })
+    })
+
   })
 })
