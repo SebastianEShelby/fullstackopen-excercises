@@ -5,7 +5,7 @@ const Notification = ({ notification }) => {
   const messageColor = notification.type.match(NOTIFICATION_MESSAGE_TYPES.success) ? 'green' : 'red'
 
   return (
-    <div className='success' style={{ color: messageColor }}>
+    <div className='notification' style={{ color: messageColor }}>
       {notification.message}
     </div>
   )
