@@ -35,7 +35,7 @@ describe('<Blog />', () => {
 
     const blogElement = screen.getByTestId('blog')
     const blogDetailsElement = screen.getByTestId('blog-details')
-    const viewBlogDetailsButton = screen.getByTestId('view-blog-details')
+    const viewBlogDetailsButton = screen.getByTestId('toggle-blog-details-button')
     const testUserEvent = userEvent.setup()
 
     await testUserEvent.click(viewBlogDetailsButton)
@@ -52,7 +52,7 @@ describe('<Blog />', () => {
     const setNotificationWithTimeOut = jest.fn()
     render(<Blog blog={blog} user={user} setNotificationWithTimeOut={setNotificationWithTimeOut} />)
 
-    const viewBlogDetailsButton = screen.getByTestId('view-blog-details')
+    const viewBlogDetailsButton = screen.getByTestId('toggle-blog-details-button')
     const updateBlogLikesButton = screen.getByTestId('update-blog-likes')
     const testUserEvent = userEvent.setup()
 

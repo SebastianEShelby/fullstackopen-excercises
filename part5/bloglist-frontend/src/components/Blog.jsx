@@ -73,7 +73,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
 
   return (
     <div style={blogStyle} data-testid="blog">
-      <>{blog.title} {blog.author} <button data-testid="view-blog-details" onClick={toggleIsDetailedView}>{isDetailedView ? 'hide' : 'view'}</button></>
+      <>{blog.title} {blog.author} <button data-testid="toggle-blog-details-button" onClick={toggleIsDetailedView}>{isDetailedView ? 'hide' : 'view'}</button></>
       <div data-testid="blog-details" style={{ display: isDetailedView ? '' : 'none' }}>
         {blog.url ? <p>Url: {blog.url}</p> : null}
         {blog.likes !== (null || undefined) ?
@@ -84,7 +84,7 @@ const Blog = ({ blog, setNotificationWithTimeOut, updateBlogs, updateBlogsAfterD
         }
         {blog.user.name ? <p>User: {blog.user.name}</p> : null}
         {blog.user.username === user.username ?
-          <button style={{ 'color': 'red' }} onClick={deleteBlog}>remove</button>
+          <button data-testid="remove-blog-button" style={{ 'color': 'red' }} onClick={deleteBlog}>remove</button>
           :
           null
         }

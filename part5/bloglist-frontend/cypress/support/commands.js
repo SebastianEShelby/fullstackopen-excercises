@@ -33,6 +33,9 @@ Cypress.Commands.add('login', ({ username, password }) => {
   })
 })
 
+Cypress.Commands.add('logout', () => {
+  window.localStorage.removeItem('LoggedInBlogListUser')
+})
 
 Cypress.Commands.add('createBlog', ({ title, author, url }) => {
   cy.request({

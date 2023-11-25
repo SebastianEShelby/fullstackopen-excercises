@@ -97,19 +97,60 @@ describe('Blog app', function () {
       it('one of those can be liked', function () {
         cy.get('[data-testid="blogs"]').contains('Canonical string reduction').as('blog')
 
-        cy.get('@blog').find('button').contains('view').as('viewButton').click()
-        cy.get('@blog').find('button').contains('like').as('likeButton').click()
+        cy.get('@blog').find('button').contains('view').click()
+        cy.get('@blog').find('button').contains('like').click()
         cy.get('@blog').contains('Likes').contains(1)
       })
 
-      it.only('one of those can be deleted by the user who created it', function () {
+      it('one of those can be deleted by the user who created it', function () {
         cy.get('[data-testid="blogs"]').contains('Canonical string reduction').as('blog')
 
-        cy.get('@blog').find('button').contains('view').as('viewButton').click()
-        cy.get('@blog').find('button').contains('remove').as('removeButton').click()
+        cy.get('@blog').find('button').contains('view').click()
+        cy.get('@blog').find('button').contains('remove').click()
         cy.get('@blog').should('not.exist')
       })
     })
+
+
+
+  })
+
+  it('only the creator can see the delete button of a blog, not anyone else', function () {
+
+    const secondUser = {
+      name: 'Jane Doe',
+      username: 'jane',
+      password: '1234'
+    }
+
+    const userBlog = {
+      title: 'User 1 Blog Title',
+      author: 'User 1 Blog Author',
+      url: 'User 1 Blog URL',
+    }
+
+    const secondUserBlog = {
+      title: 'User 2 Blog Title',
+      author: 'User 2 Blog Author',
+      url: 'User 2 Blog URL',
+    }
+
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, secondUser)
+    cy.visit('')
+    cy.login({ username: user.username, password: user.password })
+    cy.createBlog(userBlog)
+    cy.logout()
+    cy.login({ username: secondUser.username, password: secondUser.password })
+    cy.createBlog(secondUserBlog)
+
+    cy.get('[data-testid="blogs"]').contains('User 1 Blog Title').as('blog1')
+    cy.get('[data-testid="blogs"]').contains('User 2 Blog Title').as('blog2')
+
+    cy.get('@blog1').find('[data-testid="toggle-blog-details-button"]').click()
+    cy.get('@blog2').find('[data-testid="toggle-blog-details-button"]').click()
+
+    cy.get('@blog1').find('[data-testid="remove-blog-button"]').should('not.exist')
+    cy.get('@blog2').find('[data-testid="remove-blog-button"]').should('be.visible')
 
   })
 })
