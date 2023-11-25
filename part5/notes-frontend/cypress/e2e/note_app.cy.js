@@ -40,26 +40,23 @@ describe('Note app', function () {
       cy.contains('a note created by cypress')
     })
 
-    describe('and a note exists', function () {
+    describe('and several notes exist', function () {
       beforeEach(function () {
-        cy.createNote({
-          content: 'another note cypress',
-          important: true
-        })
+        cy.login({ username: 'mluukkai', password: 'salainen' })
+        cy.createNote({ content: 'first note', important: false })
+        cy.createNote({ content: 'second note', important: false })
+        cy.createNote({ content: 'third note', important: false })
       })
 
-      it('it can be made not important', function () {
-        cy.contains('another note cypress')
-          .contains('make not important')
-          .click()
-
-        cy.contains('another note cypress')
-          .contains('make important')
+      it('one of those can be made important', function () {
+        cy.contains('second note').parent().find('button').as('theButton')
+        cy.get('@theButton').click()
+        cy.get('@theButton').should('contain', 'make not important')
       })
     })
   })
 
-  it.only('login fails with wrong password', function () {
+  it('login fails with wrong password', function () {
     cy.contains('log in').click()
     cy.get('#username').type('mluukkai')
     cy.get('#password').type('wrong')
