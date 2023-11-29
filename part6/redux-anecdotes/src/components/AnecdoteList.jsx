@@ -18,10 +18,14 @@ const AnecdoteList = () => {
   }
 
   const sortedAnecdotes = (anecdotes) => {
+    if (!anecdotes || anecdotes.length < 1) return []
     return anecdotes.sort((a, b) => b.votes - a.votes)
   }
 
   const filteredAnecdotes = (anecdotes, filter) => {
+    if (!anecdotes || anecdotes.length < 1) return []
+    // cannot return immutable state object for sort
+    if (!filter) return anecdotes.slice()
     return anecdotes.filter(anecdote => anecdote.content.toLocaleLowerCase().match(filter.toLocaleLowerCase()))
   }
 
