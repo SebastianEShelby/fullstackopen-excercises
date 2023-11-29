@@ -2,7 +2,7 @@ const noteReducer = (state = [], action) => {
 
   switch (action.type) {
     case 'NEW_NOTE':
-      return state.concat(action.payload)
+      return [...state, action.payload]
 
     case 'TOGGLE_IMPORTANCE':
       return state.map(note => note.id === action.payload.id ? {
