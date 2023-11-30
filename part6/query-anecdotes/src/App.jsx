@@ -11,6 +11,11 @@ const App = () => {
   const voteForAnecdoteMutation = useMutation({
     mutationFn: anecdotesService.updateVotes,
     onSuccess: (updatedAnecdote) => {
+      const message = `Anecdote "${updatedAnecdote.content}" voted`
+      dispatchNotification({ message })
+      setTimeout(() => {
+        dispatchNotification('')
+      }, 5000)
       const updatedAnecdotes = queryClient.getQueryData(['anecdotes']).map(anecdote => anecdote.id === updatedAnecdote.id ? updatedAnecdote : anecdote)
       queryClient.setQueryData(['anecdotes'], updatedAnecdotes)
     },
@@ -34,11 +39,6 @@ const App = () => {
   const handleVote = (anecdote) => {
     console.log('vote')
     voteForAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 })
-    const message = `Anecdote "${anecdote.content}" voted`
-    dispatchNotification({ message })
-    setTimeout(() => {
-      dispatchNotification('')
-    }, 5000)
   }
 
   return (

@@ -9,9 +9,21 @@ const AnecdoteForm = () => {
   const newAnecdoteMutation = useMutation({
     mutationFn: anecdotesService.createNew,
     onSuccess: (newAnecdote) => {
+      const message = `Anecdote "${newAnecdote.content}" created`
+      dispatchNotification({ message })
+      setTimeout(() => {
+        dispatchNotification('')
+      }, 5000)
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
     },
+    onError: (err) => {
+      const message = err.response.data.error || err.message || ''
+      dispatchNotification({ message })
+      setTimeout(() => {
+        dispatchNotification('')
+      }, 5000)
+    }
   })
 
   const onCreate = (event) => {
@@ -20,11 +32,6 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
     console.log('new anecdote')
     newAnecdoteMutation.mutate({ content, votes: 0 })
-    const message = `Anecdote "${content}" created`
-    dispatchNotification({ message })
-    setTimeout(() => {
-      dispatchNotification('')
-    }, 5000)
   }
 
   return (
