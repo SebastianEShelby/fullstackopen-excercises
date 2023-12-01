@@ -15,13 +15,23 @@ const useField = (type) => {
   }
 }
 
+const getRandomId = () => Number((Math.random() * 1000000).toFixed(0))
+
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
 
-  // ...
+  useEffect(() => {
+    getAll()
+  }, [baseUrl])
 
-  const create = (resource) => {
-    // ...
+  const getAll = async () => {
+    const response = await axios.get(baseUrl)
+    setResources(response.data)
+  }
+
+  const create = async resource => {
+    const response = await axios.post(baseUrl, { ...resource, id: getRandomId() })
+    setResources(resources.concat(response.data))
   }
 
   const service = {
@@ -45,10 +55,10 @@ const App = () => {
     event.preventDefault()
     noteService.create({ content: content.value })
   }
- 
+
   const handlePersonSubmit = (event) => {
     event.preventDefault()
-    personService.create({ name: name.value, number: number.value})
+    personService.create({ name: name.value, number: number.value })
   }
 
   return (
@@ -62,7 +72,7 @@ const App = () => {
 
       <h2>persons</h2>
       <form onSubmit={handlePersonSubmit}>
-        name <input {...name} /> <br/>
+        name <input {...name} /> <br />
         number <input {...number} />
         <button>create</button>
       </form>
