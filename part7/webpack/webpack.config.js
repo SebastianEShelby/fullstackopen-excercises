@@ -6,18 +6,20 @@ const config = () => {
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: 'main.js'
-    }
+    },
+
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          },
+        },
+      ],
+    },
   }
 }
-
-// We can also define config as an object instead of a function:
-// const config = {
-//   entry: './src/index.js',
-//   output: {
-//     path: path.resolve(__dirname, 'build'),
-//     filename: 'main.js'
-//   }
-// }
-
 
 module.exports = config
