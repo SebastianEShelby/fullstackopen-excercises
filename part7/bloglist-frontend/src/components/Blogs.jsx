@@ -4,7 +4,7 @@ import blogService from '../services/blogs'
 import CreateBlog from './CreateBlog'
 import Togglable from './Togglable'
 
-const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
+const Blogs = ({ user, logout }) => {
   const [blogs, setBlogs] = useState([])
   const togglableBlogRef = useRef()
   const isBlogs = blogs && blogs.length > 0
@@ -39,7 +39,6 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
         <CreateBlog
           blogs={blogs}
           setBlogs={setBlogs}
-          setNotificationWithTimeOut={setNotificationWithTimeOut}
           togglableBlogRef={togglableBlogRef}
         />
       </Togglable>
@@ -52,7 +51,6 @@ const Blogs = ({ user, logout, setNotificationWithTimeOut }) => {
               blog={blog}
               updateBlogs={updateBlogs}
               updateBlogsAfterDelete={updateBlogsAfterDelete}
-              setNotificationWithTimeOut={setNotificationWithTimeOut}
               user={user}
             />
           ))

@@ -1,17 +1,14 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
+import { useDispatch } from 'react-redux'
+import { sendNotification } from '../reducers/notificationReducer'
 
-const CreateBlog = ({
-  blogs,
-  setBlogs,
-  setNotificationWithTimeOut,
-  togglableBlogRef,
-}) => {
+const CreateBlog = ({ blogs, setBlogs, togglableBlogRef }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-
+  const dispatch = useDispatch()
   const clearBlogForm = () => {
     setTitle('')
     setAuthor('')
@@ -33,16 +30,20 @@ const CreateBlog = ({
       clearBlogForm()
       togglableBlogRef.current.toggleVisibility()
 
-      setNotificationWithTimeOut(
-        `A new blog "${returnedBlog.title}" ${
-          returnedBlog.author ? `by "${returnedBlog.author}"` : ''
-        } added!`,
-        NOTIFICATION_MESSAGE_TYPES.success,
+      dispatch(
+        sendNotification(
+          `A new blog "${returnedBlog.title}" ${
+            returnedBlog.author ? `by "${returnedBlog.author}"` : ''
+          } added!`,
+          NOTIFICATION_MESSAGE_TYPES.success,
+        ),
       )
     } catch (exception) {
-      setNotificationWithTimeOut(
-        `${exception?.response?.data?.error ?? 'server error'}`,
-        NOTIFICATION_MESSAGE_TYPES.error,
+      dispatch(
+        sendNotification(
+          `${exception?.response?.data?.error ?? 'server error'}`,
+          NOTIFICATION_MESSAGE_TYPES.error,
+        ),
       )
     }
   }

@@ -1,15 +1,12 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
+import { sendNotification } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({
-  blog,
-  setNotificationWithTimeOut,
-  updateBlogs,
-  updateBlogsAfterDelete,
-  user,
-}) => {
+const Blog = ({ blog, updateBlogs, updateBlogsAfterDelete, user }) => {
   const [isDetailedView, setIsDetailedView] = useState(false)
+  const dispatch = useDispatch()
   const toggleIsDetailedView = () => {
     setIsDetailedView(!isDetailedView)
   }
@@ -36,17 +33,21 @@ const Blog = ({
 
       updateBlogs(updatedBlog)
 
-      setNotificationWithTimeOut(
-        `Blog "${updatedBlog.title}" ${
-          updatedBlog.author ? `by "${updatedBlog.author}"` : ''
-        } likes updated to ${updatedBlog.likes}`,
-        NOTIFICATION_MESSAGE_TYPES.success,
+      dispatch(
+        sendNotification(
+          `Blog "${updatedBlog.title}" ${
+            updatedBlog.author ? `by "${updatedBlog.author}"` : ''
+          } likes updated to ${updatedBlog.likes}`,
+          NOTIFICATION_MESSAGE_TYPES.success,
+        ),
       )
     } catch (exception) {
-      setNotificationWithTimeOut(
-        `
+      dispatch(
+        sendNotification(
+          `
       ${exception?.response?.data?.error ?? 'server error'}`,
-        NOTIFICATION_MESSAGE_TYPES.error,
+          NOTIFICATION_MESSAGE_TYPES.error,
+        ),
       )
     }
   }
@@ -68,17 +69,21 @@ const Blog = ({
 
       updateBlogsAfterDelete(blogToDelete.id)
 
-      setNotificationWithTimeOut(
-        `Blog "${blogToDelete.title}" ${
-          blogToDelete.author ? `by "${blogToDelete.author}"` : ''
-        } was deleted!`,
-        NOTIFICATION_MESSAGE_TYPES.success,
+      dispatch(
+        sendNotification(
+          `Blog "${blogToDelete.title}" ${
+            blogToDelete.author ? `by "${blogToDelete.author}"` : ''
+          } was deleted!`,
+          NOTIFICATION_MESSAGE_TYPES.success,
+        ),
       )
     } catch (exception) {
-      setNotificationWithTimeOut(
-        `
+      dispatch(
+        sendNotification(
+          `
       ${exception.response.data.error}`,
-        NOTIFICATION_MESSAGE_TYPES.error,
+          NOTIFICATION_MESSAGE_TYPES.error,
+        ),
       )
     }
   }

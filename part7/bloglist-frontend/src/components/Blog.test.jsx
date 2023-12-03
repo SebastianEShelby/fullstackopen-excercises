@@ -48,27 +48,4 @@ describe('<Blog />', () => {
     expect(blogElement).toHaveTextContent('1')
     expect(blogDetailsElement).toBeVisible()
   })
-
-  test('if the like button is clicked twice, the event handler the component received as props is called twice', async () => {
-    const setNotificationWithTimeOut = jest.fn()
-    render(
-      <Blog
-        blog={blog}
-        user={user}
-        setNotificationWithTimeOut={setNotificationWithTimeOut}
-      />,
-    )
-
-    const viewBlogDetailsButton = screen.getByTestId(
-      'toggle-blog-details-button',
-    )
-    const updateBlogLikesButton = screen.getByTestId('update-blog-likes')
-    const testUserEvent = userEvent.setup()
-
-    await testUserEvent.click(viewBlogDetailsButton)
-    expect(updateBlogLikesButton).toBeVisible()
-    await testUserEvent.dblClick(updateBlogLikesButton)
-
-    expect(setNotificationWithTimeOut).toHaveBeenCalledTimes(2)
-  })
 })
