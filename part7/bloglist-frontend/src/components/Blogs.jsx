@@ -1,31 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 import Blog from './Blog'
-import blogService from '../services/blogs'
 import CreateBlog from './CreateBlog'
 import Togglable from './Togglable'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeBlogs } from '../reducers/blogsReducer'
+import { createSelector } from '@reduxjs/toolkit'
+
+const blogsSelector = (state) => state.blogs
+const sortedBlogsSelector = createSelector(blogsSelector, (blogs) =>
+  [...blogs].sort((a, b) => b.likes - a.likes),
+)
 
 const Blogs = ({ user, logout }) => {
-  const [blogs, setBlogs] = useState([])
+  const sortedBlogs = useSelector(sortedBlogsSelector)
   const togglableBlogRef = useRef()
-  const isBlogs = blogs && blogs.length > 0
-
+  const isBlogs = sortedBlogs && sortedBlogs.length > 0
+  const dispatch = useDispatch()
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      setBlogs(blogs)
-    })
+    dispatch(initializeBlogs())
   }, [])
-
-  const updateBlogs = (updatedBlog) => {
-    setBlogs(
-      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog)),
-    )
-  }
-
-  const updateBlogsAfterDelete = (deletedBlogId) => {
-    setBlogs(blogs.filter((blog) => blog.id !== deletedBlogId))
-  }
-
-  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   return (
     <div data-testid="blogs">
@@ -36,23 +29,13 @@ const Blogs = ({ user, logout }) => {
       </p>
 
       <Togglable buttonLabel="create new blog" ref={togglableBlogRef}>
-        <CreateBlog
-          blogs={blogs}
-          setBlogs={setBlogs}
-          togglableBlogRef={togglableBlogRef}
-        />
+        <CreateBlog togglableBlogRef={togglableBlogRef} />
       </Togglable>
 
       <br />
       {isBlogs
         ? sortedBlogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateBlogs={updateBlogs}
-              updateBlogsAfterDelete={updateBlogsAfterDelete}
-              user={user}
-            />
+            <Blog key={blog.id} blog={blog} user={user} />
           ))
         : null}
     </div>

@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
-import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
 import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogsReducer'
 import { sendNotification } from '../reducers/notificationReducer'
+import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
 
-const CreateBlog = ({ blogs, setBlogs, togglableBlogRef }) => {
+const CreateBlog = ({ togglableBlogRef }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -15,35 +15,17 @@ const CreateBlog = ({ blogs, setBlogs, togglableBlogRef }) => {
     setUrl('')
   }
 
-  const createBlog = async (event) => {
+  const onCreateBlogSubmit = async (event) => {
     event.preventDefault()
-
-    const blogObject = {
-      title,
-      author,
-      url,
-    }
+    const blogObject = { title, author, url }
 
     try {
-      const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
+      await dispatch(createBlog(blogObject)).unwrap()
       clearBlogForm()
       togglableBlogRef.current.toggleVisibility()
-
-      dispatch(
-        sendNotification(
-          `A new blog "${returnedBlog.title}" ${
-            returnedBlog.author ? `by "${returnedBlog.author}"` : ''
-          } added!`,
-          NOTIFICATION_MESSAGE_TYPES.success,
-        ),
-      )
     } catch (exception) {
       dispatch(
-        sendNotification(
-          `${exception?.response?.data?.error ?? 'server error'}`,
-          NOTIFICATION_MESSAGE_TYPES.error,
-        ),
+        sendNotification(exception.message, NOTIFICATION_MESSAGE_TYPES.error),
       )
     }
   }
@@ -51,7 +33,7 @@ const CreateBlog = ({ blogs, setBlogs, togglableBlogRef }) => {
   return (
     <>
       <h2>Create New</h2>
-      <form onSubmit={createBlog}>
+      <form onSubmit={onCreateBlogSubmit}>
         Title:{' '}
         <input
           data-testid="title"

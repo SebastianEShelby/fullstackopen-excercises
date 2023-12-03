@@ -1,10 +1,8 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
-import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
-import { sendNotification } from '../reducers/notificationReducer'
+import { updateBlog, deleteBlog } from '../reducers/blogsReducer'
 import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, updateBlogs, updateBlogsAfterDelete, user }) => {
+const Blog = ({ blog, user }) => {
   const [isDetailedView, setIsDetailedView] = useState(false)
   const dispatch = useDispatch()
   const toggleIsDetailedView = () => {
@@ -17,42 +15,17 @@ const Blog = ({ blog, updateBlogs, updateBlogsAfterDelete, user }) => {
     marginBottom: 5,
   }
 
-  const updateBlogLikes = async (event) => {
+  const increaseBlogLikes = async (event) => {
     event.preventDefault()
-
-    const blogObject = {
+    const blogToUpdate = {
+      ...blog,
       user: blog.user.id,
       likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
     }
-
-    try {
-      const updatedBlog = await blogService.update(blog.id, blogObject)
-
-      updateBlogs(updatedBlog)
-
-      dispatch(
-        sendNotification(
-          `Blog "${updatedBlog.title}" ${
-            updatedBlog.author ? `by "${updatedBlog.author}"` : ''
-          } likes updated to ${updatedBlog.likes}`,
-          NOTIFICATION_MESSAGE_TYPES.success,
-        ),
-      )
-    } catch (exception) {
-      dispatch(
-        sendNotification(
-          `
-      ${exception?.response?.data?.error ?? 'server error'}`,
-          NOTIFICATION_MESSAGE_TYPES.error,
-        ),
-      )
-    }
+    dispatch(updateBlog(blogToUpdate))
   }
 
-  const deleteBlog = async (event) => {
+  const removeBlog = async (event) => {
     event.preventDefault()
 
     if (
@@ -62,30 +35,7 @@ const Blog = ({ blog, updateBlogs, updateBlogsAfterDelete, user }) => {
     )
       return
 
-    const blogToDelete = blog
-
-    try {
-      await blogService.remove(blogToDelete.id)
-
-      updateBlogsAfterDelete(blogToDelete.id)
-
-      dispatch(
-        sendNotification(
-          `Blog "${blogToDelete.title}" ${
-            blogToDelete.author ? `by "${blogToDelete.author}"` : ''
-          } was deleted!`,
-          NOTIFICATION_MESSAGE_TYPES.success,
-        ),
-      )
-    } catch (exception) {
-      dispatch(
-        sendNotification(
-          `
-      ${exception.response.data.error}`,
-          NOTIFICATION_MESSAGE_TYPES.error,
-        ),
-      )
-    }
+    dispatch(deleteBlog(blog))
   }
 
   return (
@@ -108,7 +58,7 @@ const Blog = ({ blog, updateBlogs, updateBlogsAfterDelete, user }) => {
           <p>
             Likes: {blog.likes}
             &nbsp;
-            <button data-testid="update-blog-likes" onClick={updateBlogLikes}>
+            <button data-testid="update-blog-likes" onClick={increaseBlogLikes}>
               like
             </button>
           </p>
@@ -118,7 +68,7 @@ const Blog = ({ blog, updateBlogs, updateBlogsAfterDelete, user }) => {
           <button
             data-testid="remove-blog-button"
             style={{ color: 'red' }}
-            onClick={deleteBlog}
+            onClick={removeBlog}
           >
             remove
           </button>
