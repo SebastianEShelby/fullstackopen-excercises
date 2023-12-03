@@ -1,4 +1,10 @@
-export const Login = ({ username, password, setUsername, setPassword, handleLogin }) => {
+export const Login = ({
+  username,
+  password,
+  setUsername,
+  setPassword,
+  handleLogin,
+}) => {
   return (
     <>
       <form onSubmit={handleLogin}>
@@ -23,7 +29,9 @@ export const Login = ({ username, password, setUsername, setPassword, handleLogi
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button data-testid="login-button" type="submit">login</button>
+        <button data-testid="login-button" type="submit">
+          login
+        </button>
       </form>
     </>
   )

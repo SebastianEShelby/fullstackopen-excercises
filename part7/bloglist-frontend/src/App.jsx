@@ -34,16 +34,21 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password,
       })
-      window.localStorage.setItem(
-        'LoggedInBlogListUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('LoggedInBlogListUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setNotificationWithTimeOut(`${user.name} logged in!`, NOTIFICATION_MESSAGE_TYPES.success)
+      setNotificationWithTimeOut(
+        `${user.name} logged in!`,
+        NOTIFICATION_MESSAGE_TYPES.success,
+      )
     } catch (exception) {
-      setNotificationWithTimeOut('Wrong credentials', NOTIFICATION_MESSAGE_TYPES.error)
+      setNotificationWithTimeOut(
+        'Wrong credentials',
+        NOTIFICATION_MESSAGE_TYPES.error,
+      )
     }
   }
 
@@ -54,20 +59,33 @@ const App = () => {
     setUser(null)
     setUsername('')
     setPassword('')
-    setNotificationWithTimeOut(`${userName} logged out!`, NOTIFICATION_MESSAGE_TYPES.success)
+    setNotificationWithTimeOut(
+      `${userName} logged out!`,
+      NOTIFICATION_MESSAGE_TYPES.success,
+    )
   }
 
   return (
     <>
       <Notification notification={notification} />
 
-      {user === null ?
-        <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin} />
-        :
+      {user === null ? (
+        <Login
+          username={username}
+          password={password}
+          setUsername={setUsername}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+        />
+      ) : (
         <>
-          <Blogs user={user} logout={logout} setNotificationWithTimeOut={setNotificationWithTimeOut} />
+          <Blogs
+            user={user}
+            logout={logout}
+            setNotificationWithTimeOut={setNotificationWithTimeOut}
+          />
         </>
-      }
+      )}
     </>
   )
 }

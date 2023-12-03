@@ -8,7 +8,7 @@ describe('<Blog />', () => {
   const user = {
     username: 'john',
     name: 'John Doe',
-    id: '1111'
+    id: '1111',
   }
   const blog = {
     title: 'Test blog',
@@ -16,7 +16,7 @@ describe('<Blog />', () => {
     url: 'fakedomain.com',
     likes: 1,
     user: user,
-    id: '2222'
+    id: '2222',
   }
 
   test('only renders blog title and author by default ', () => {
@@ -35,7 +35,9 @@ describe('<Blog />', () => {
 
     const blogElement = screen.getByTestId('blog')
     const blogDetailsElement = screen.getByTestId('blog-details')
-    const viewBlogDetailsButton = screen.getByTestId('toggle-blog-details-button')
+    const viewBlogDetailsButton = screen.getByTestId(
+      'toggle-blog-details-button',
+    )
     const testUserEvent = userEvent.setup()
 
     await testUserEvent.click(viewBlogDetailsButton)
@@ -48,11 +50,18 @@ describe('<Blog />', () => {
   })
 
   test('if the like button is clicked twice, the event handler the component received as props is called twice', async () => {
-
     const setNotificationWithTimeOut = jest.fn()
-    render(<Blog blog={blog} user={user} setNotificationWithTimeOut={setNotificationWithTimeOut} />)
+    render(
+      <Blog
+        blog={blog}
+        user={user}
+        setNotificationWithTimeOut={setNotificationWithTimeOut}
+      />,
+    )
 
-    const viewBlogDetailsButton = screen.getByTestId('toggle-blog-details-button')
+    const viewBlogDetailsButton = screen.getByTestId(
+      'toggle-blog-details-button',
+    )
     const updateBlogLikesButton = screen.getByTestId('update-blog-likes')
     const testUserEvent = userEvent.setup()
 

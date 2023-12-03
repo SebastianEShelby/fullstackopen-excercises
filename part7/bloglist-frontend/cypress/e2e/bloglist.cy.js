@@ -2,7 +2,7 @@ describe('Blog app', function () {
   const user = {
     name: 'John Doe',
     username: 'john',
-    password: '1234'
+    password: '1234',
   }
 
   beforeEach(function () {
@@ -17,12 +17,11 @@ describe('Blog app', function () {
     cy.get('[data-testid="login-button"]').should('be.visible')
   })
 
-
   describe('Login', function () {
     it('succeeds with correct credentials', function () {
       const validLogin = {
         username: user.username,
-        password: user.password
+        password: user.password,
       }
 
       cy.get('[data-testid="username"]').type(validLogin.username)
@@ -36,10 +35,9 @@ describe('Blog app', function () {
     })
 
     it('fails with wrong credentials', function () {
-
       const invalidLogin = {
         username: 'john',
-        password: 'wrongpassword'
+        password: 'wrongpassword',
       }
 
       cy.get('[data-testid="username"]').type(invalidLogin.username)
@@ -68,20 +66,19 @@ describe('Blog app', function () {
       cy.contains('Title John Doe')
     })
 
-
     describe('and several blogs exist', function () {
       const blogs = [
         {
           title: 'Go To Statement Considered Harmful',
           author: 'Edsger W. Dijkstra',
           url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-          likes: 5
+          likes: 5,
         },
         {
           title: 'React patterns',
           author: 'Michael Chan',
           url: 'https://reactpatterns.com/',
-          likes: 10
+          likes: 10,
         },
         {
           title: 'Canonical string reduction',
@@ -102,7 +99,9 @@ describe('Blog app', function () {
 
         cy.get('@blog').find('button').contains('view').click()
         cy.get('@blog').find('button').contains('like').click()
-        cy.get('@blog').contains('Likes').contains(originalLikes + 1)
+        cy.get('@blog')
+          .contains('Likes')
+          .contains(originalLikes + 1)
       })
 
       it('one of those can be deleted by the user who created it', function () {
@@ -123,11 +122,10 @@ describe('Blog app', function () {
   })
 
   it('only the creator can see the delete button of a blog, not anyone else', function () {
-
     const secondUser = {
       name: 'Jane Doe',
       username: 'jane',
-      password: '1234'
+      password: '1234',
     }
 
     const userBlog = {
@@ -156,8 +154,11 @@ describe('Blog app', function () {
     cy.get('@blog1').find('[data-testid="toggle-blog-details-button"]').click()
     cy.get('@blog2').find('[data-testid="toggle-blog-details-button"]').click()
 
-    cy.get('@blog1').find('[data-testid="remove-blog-button"]').should('not.exist')
-    cy.get('@blog2').find('[data-testid="remove-blog-button"]').should('be.visible')
-
+    cy.get('@blog1')
+      .find('[data-testid="remove-blog-button"]')
+      .should('not.exist')
+    cy.get('@blog2')
+      .find('[data-testid="remove-blog-button"]')
+      .should('be.visible')
   })
 })

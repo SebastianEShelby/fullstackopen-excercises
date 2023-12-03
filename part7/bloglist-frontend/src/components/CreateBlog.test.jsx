@@ -17,7 +17,13 @@ describe('<CreateBlog />', () => {
     const testUserEvent = userEvent.setup()
     const setNotificationWithTimeOut = jest.fn()
 
-    render(<CreateBlog blogs={blogs} setBlogs={setBlogs} setNotificationWithTimeOut={setNotificationWithTimeOut} />)
+    render(
+      <CreateBlog
+        blogs={blogs}
+        setBlogs={setBlogs}
+        setNotificationWithTimeOut={setNotificationWithTimeOut}
+      />,
+    )
 
     const titleInput = screen.getByTestId('title')
     const authorInput = screen.getByTestId('author')
@@ -31,6 +37,11 @@ describe('<CreateBlog />', () => {
     await testUserEvent.click(submitButton)
 
     expect(setNotificationWithTimeOut).toHaveBeenCalledTimes(1)
-    expect(setNotificationWithTimeOut.mock.calls[0][0]).toBe(('server error' || `A new blog "${newBlog.title}" ${newBlog.author ? `by "${newBlog.author}"` : ''} added!`))
+    expect(setNotificationWithTimeOut.mock.calls[0][0]).toBe(
+      'server error' ||
+        `A new blog "${newBlog.title}" ${
+          newBlog.author ? `by "${newBlog.author}"` : ''
+        } added!`,
+    )
   })
 })
