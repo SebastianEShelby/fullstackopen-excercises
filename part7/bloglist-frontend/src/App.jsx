@@ -1,17 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Login from './components/Login'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import Users from './components/Users'
+import User from './components/User'
+import { logout } from './reducers/userReducer'
 
 const App = () => {
+  const [users, setUsers] = useState([])
   const dispatch = useDispatch()
-  const userSelector = (state) => state.user
-  const user = useSelector(userSelector)
+  const usersSelector = (state) => state.user
+  const user = useSelector(usersSelector)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('LoggedInBlogListUser')
@@ -21,14 +24,46 @@ const App = () => {
     blogService.setToken(userObject.token)
   }, [])
 
+  const userMatch = useMatch('/users/:id')
+  const matchedUser = userMatch
+    ? users.find((user) => {
+        return user.id === userMatch.params.id
+      })
+    : null
+
+  const handleLogout = () => {
+    dispatch(logout())
+  }
+
   return (
-    <Router>
+    <>
       <Notification />
-      {!user ? <Login /> : <Blogs />}
-      <Routes>
-        <Route path="/users" element={<Users />}></Route>
-      </Routes>
-    </Router>
+      {!user ? (
+        <Login />
+      ) : (
+        <div>
+          <div>
+            <h2>Blogs</h2>
+            <p>
+              {user.name} logged in &nbsp;
+              <button onClick={() => handleLogout()}>logout</button>
+            </p>
+          </div>
+
+          <Routes>
+            <Route path="/" element={<Blogs />}></Route>
+            <Route
+              path="/users/:id"
+              element={<User user={matchedUser} />}
+            ></Route>
+            <Route
+              path="/users"
+              element={<Users users={users} setUsers={setUsers} />}
+            ></Route>
+          </Routes>
+        </div>
+      )}
+    </>
   )
 }
 
