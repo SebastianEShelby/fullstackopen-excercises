@@ -1,10 +1,18 @@
-import { updateBlog, deleteBlog } from '../reducers/blogsReducer'
+import { useState } from 'react'
+import {
+  updateBlog,
+  deleteBlog,
+  createBlogComment,
+} from '../reducers/blogsReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { sendNotification } from '../reducers/notificationReducer'
+import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
 
 const Blog = ({ blog }) => {
   const userSelector = (state) => state.user
   const user = useSelector(userSelector)
   const dispatch = useDispatch()
+  const [comment, setComment] = useState('')
 
   const increaseBlogLikes = async (event) => {
     event.preventDefault()
@@ -16,7 +24,7 @@ const Blog = ({ blog }) => {
     dispatch(updateBlog(blogToUpdate))
   }
 
-  const removeBlog = async (event) => {
+  const removeBlog = (event) => {
     event.preventDefault()
 
     if (
@@ -27,6 +35,18 @@ const Blog = ({ blog }) => {
       return
 
     dispatch(deleteBlog(blog))
+  }
+
+  const handleAddComment = async (event) => {
+    event.preventDefault()
+    try {
+      await dispatch(createBlogComment({ blog, comment })).unwrap()
+      setComment('')
+    } catch (exception) {
+      dispatch(
+        sendNotification(exception.message, NOTIFICATION_MESSAGE_TYPES.error),
+      )
+    }
   }
 
   if (!blog) return <h2>Blog not found!</h2>
@@ -60,6 +80,26 @@ const Blog = ({ blog }) => {
           >
             remove
           </button>
+        ) : null}
+      </div>
+      <div>
+        <h3>comments</h3>
+        <form onSubmit={handleAddComment}>
+          Title:
+          <input
+            type="text"
+            name="comment"
+            value={comment}
+            onChange={({ target }) => setComment(target.value)}
+          />
+          <button type="submit">add comment</button>
+        </form>
+        {blog.comments && blog.comments.length > 0 ? (
+          <ul>
+            {blog.comments.map((comment, i) => (
+              <li key={i}>{comment}</li>
+            ))}
+          </ul>
         ) : null}
       </div>
     </div>

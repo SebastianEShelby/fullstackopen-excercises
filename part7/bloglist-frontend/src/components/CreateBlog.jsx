@@ -34,7 +34,7 @@ const CreateBlog = ({ togglableBlogRef }) => {
     <>
       <h2>Create New</h2>
       <form onSubmit={handleCreateBlog}>
-        Title:{' '}
+        Title:
         <input
           data-testid="title"
           type="text"
@@ -43,7 +43,7 @@ const CreateBlog = ({ togglableBlogRef }) => {
           onChange={({ target }) => setTitle(target.value)}
         />
         <br />
-        Author:{' '}
+        Author:
         <input
           data-testid="author"
           type="text"
@@ -52,7 +52,7 @@ const CreateBlog = ({ togglableBlogRef }) => {
           onChange={({ target }) => setAuthor(target.value)}
         />
         <br />
-        Url:{' '}
+        Url:
         <input
           data-testid="url"
           type="text"

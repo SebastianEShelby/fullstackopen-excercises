@@ -23,8 +23,8 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('LoggedInBlogListUser')
     if (!loggedUserJSON) return
     const userObject = JSON.parse(loggedUserJSON)
-    dispatch(setUser(userObject))
     blogService.setToken(userObject.token)
+    dispatch(setUser(userObject))
   }, [])
 
   const userMatch = useMatch('/users/:id')

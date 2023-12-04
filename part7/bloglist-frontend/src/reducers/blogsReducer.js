@@ -24,11 +24,21 @@ const blogsSlice = createSlice({
     createOne(state, action) {
       return [...state, action.payload]
     },
+    createCommentForOne(state, action) {
+      const updatedBlogId = action.payload.id
+      const comment = action.payload.comment
+      return state.map((blog) =>
+        blog.id === updatedBlogId
+          ? { ...blog, comments: [...blog.comments, comment] }
+          : blog,
+      )
+    },
   },
 })
 
 export default blogsSlice.reducer
-const { setAll, updateOne, deleteOne, createOne } = blogsSlice.actions
+const { setAll, updateOne, deleteOne, createOne, createCommentForOne } =
+  blogsSlice.actions
 export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll()
@@ -111,3 +121,26 @@ class createBlogError extends Error {
     this.name = 'CreateBlogError'
   }
 }
+
+export const createBlogComment = createAsyncThunk(
+  'blogs/createCommentForOne',
+  async (obj, thunkAPI) => {
+    const { blog, comment } = obj
+    try {
+      const updatedBlog = await blogService.createComment(blog.id, comment)
+      thunkAPI.dispatch(createCommentForOne({ id: blog.id, comment }))
+      thunkAPI.dispatch(
+        sendNotification(
+          `Added comment ${comment} to Blog "${updatedBlog.title}" ${
+            updatedBlog.author ? `by "${updatedBlog.author}"` : ''
+          }`,
+          NOTIFICATION_MESSAGE_TYPES.success,
+        ),
+      )
+    } catch (exception) {
+      throw new createBlogError(
+        exception?.response?.data?.error ?? 'unknown server error',
+      )
+    }
+  },
+)

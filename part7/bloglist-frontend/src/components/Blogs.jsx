@@ -45,7 +45,3 @@ const Blogs = () => {
 }
 
 export default Blogs
-
-{
-  /* <Blog  blog={blog} /> */
-}
