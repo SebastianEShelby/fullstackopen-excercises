@@ -5,6 +5,8 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import Users from './components/Users'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -20,10 +22,13 @@ const App = () => {
   }, [])
 
   return (
-    <>
+    <Router>
       <Notification />
       {!user ? <Login /> : <Blogs />}
-    </>
+      <Routes>
+        <Route path="/users" element={<Users />}></Route>
+      </Routes>
+    </Router>
   )
 }
 
