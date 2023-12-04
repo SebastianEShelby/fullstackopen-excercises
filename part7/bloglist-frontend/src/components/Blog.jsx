@@ -1,21 +1,10 @@
-import { useState } from 'react'
 import { updateBlog, deleteBlog } from '../reducers/blogsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Blog = ({ blog }) => {
   const userSelector = (state) => state.user
   const user = useSelector(userSelector)
-  const [isDetailedView, setIsDetailedView] = useState(false)
   const dispatch = useDispatch()
-  const toggleIsDetailedView = () => {
-    setIsDetailedView(!isDetailedView)
-  }
-
-  const blogStyle = {
-    padding: '10px 10px',
-    border: '1px solid black',
-    marginBottom: 5,
-  }
 
   const increaseBlogLikes = async (event) => {
     event.preventDefault()
@@ -40,22 +29,19 @@ const Blog = ({ blog }) => {
     dispatch(deleteBlog(blog))
   }
 
+  if (!blog) return <h2>Blog not found!</h2>
+
   return (
-    <div style={blogStyle} data-testid="blog">
-      <>
-        {blog.title} {blog.author}{' '}
-        <button
-          data-testid="toggle-blog-details-button"
-          onClick={toggleIsDetailedView}
-        >
-          {isDetailedView ? 'hide' : 'view'}
-        </button>
-      </>
-      <div
-        data-testid="blog-details"
-        style={{ display: isDetailedView ? '' : 'none' }}
-      >
-        {blog.url ? <p>Url: {blog.url}</p> : null}
+    <div>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <div>
+        {blog.url ? (
+          <p>
+            Url:<a href={blog.url}> {blog.url}</a>
+          </p>
+        ) : null}
         {blog.likes !== (null || undefined) ? (
           <p>
             Likes: {blog.likes}
