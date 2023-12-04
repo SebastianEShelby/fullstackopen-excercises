@@ -15,7 +15,7 @@ const CreateBlog = ({ togglableBlogRef }) => {
     setUrl('')
   }
 
-  const onCreateBlogSubmit = async (event) => {
+  const handleCreateBlog = async (event) => {
     event.preventDefault()
     const blogObject = { title, author, url }
 
@@ -33,7 +33,7 @@ const CreateBlog = ({ togglableBlogRef }) => {
   return (
     <>
       <h2>Create New</h2>
-      <form onSubmit={onCreateBlogSubmit}>
+      <form onSubmit={handleCreateBlog}>
         Title:{' '}
         <input
           data-testid="title"

@@ -1,10 +1,17 @@
-export const Login = ({
-  username,
-  password,
-  setUsername,
-  setPassword,
-  handleLogin,
-}) => {
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { login } from '../reducers/userReducer'
+
+export const Login = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
+  const handleLogin = async (event) => {
+    event.preventDefault()
+
+    dispatch(login({ username, password }))
+  }
+
   return (
     <>
       <form onSubmit={handleLogin}>

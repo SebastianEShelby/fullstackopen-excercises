@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { updateBlog, deleteBlog } from '../reducers/blogsReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
+  const userSelector = (state) => state.user
+  const user = useSelector(userSelector)
   const [isDetailedView, setIsDetailedView] = useState(false)
   const dispatch = useDispatch()
   const toggleIsDetailedView = () => {
