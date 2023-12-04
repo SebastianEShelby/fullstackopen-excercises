@@ -5,7 +5,7 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route, useMatch, Link } from 'react-router-dom'
 import Users from './components/Users'
 import User from './components/User'
 import { logout } from './reducers/userReducer'
@@ -47,6 +47,16 @@ const App = () => {
 
   return (
     <>
+      {user ? (
+        <div>
+          <Link className="link" to="/">
+            blogs
+          </Link>
+          <Link className="link" to="/users">
+            users
+          </Link>
+        </div>
+      ) : null}
       <Notification />
       {!user ? (
         <Login />
