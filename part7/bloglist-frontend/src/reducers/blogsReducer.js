@@ -131,9 +131,7 @@ export const createBlogComment = createAsyncThunk(
       thunkAPI.dispatch(createCommentForOne({ id: blog.id, comment }))
       thunkAPI.dispatch(
         sendNotification(
-          `Added comment ${comment} to Blog "${updatedBlog.title}" ${
-            updatedBlog.author ? `by "${updatedBlog.author}"` : ''
-          }`,
+          `Added comment "${comment}"!`,
           NOTIFICATION_MESSAGE_TYPES.success,
         ),
       )
