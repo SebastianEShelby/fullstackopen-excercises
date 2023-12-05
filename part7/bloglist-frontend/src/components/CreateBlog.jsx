@@ -3,6 +3,9 @@ import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogsReducer'
 import { sendNotification } from '../reducers/notificationReducer'
 import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
 const CreateBlog = ({ togglableBlogRef }) => {
   const [title, setTitle] = useState('')
@@ -33,38 +36,38 @@ const CreateBlog = ({ togglableBlogRef }) => {
   return (
     <>
       <h2>Create New</h2>
-      <form onSubmit={handleCreateBlog}>
-        Title:
-        <input
-          data-testid="title"
-          type="text"
-          name="title"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-        <br />
-        Author:
-        <input
-          data-testid="author"
-          type="text"
-          name="author"
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-        <br />
-        Url:
-        <input
-          data-testid="url"
-          type="text"
-          name="url"
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-        <br />
-        <button data-testid="create-blog" type="submit">
+      <Form onSubmit={handleCreateBlog}>
+        <FloatingLabel controlId="titleInput" label="Title" className="mb-3">
+          <Form.Control
+            onChange={({ target }) => setTitle(target.value)}
+            type="text"
+            name="title"
+            value={title}
+            placeholder="Awesome title"
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="authorInput" label="Author" className="mb-3">
+          <Form.Control
+            onChange={({ target }) => setAuthor(target.value)}
+            type="text"
+            name="author"
+            value={author}
+            placeholder="John Doe"
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="urlInput" label="Url" className="mb-3">
+          <Form.Control
+            onChange={({ target }) => setUrl(target.value)}
+            type="text"
+            name="url"
+            value={url}
+            placeholder="https://www.google.com"
+          />
+        </FloatingLabel>
+        <Button className="mb-3" type="submit">
           create
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   )
 }

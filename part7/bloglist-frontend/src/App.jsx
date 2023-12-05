@@ -5,11 +5,11 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
-import { Routes, Route, useMatch, Link } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import Users from './components/Users'
 import User from './components/User'
-import { logout } from './reducers/userReducer'
 import Blog from './components/Blog'
+import NavigationMenu from './components/NavigationMenu'
 
 const App = () => {
   const [users, setUsers] = useState([])
@@ -41,35 +41,15 @@ const App = () => {
       })
     : null
 
-  const handleLogout = () => {
-    dispatch(logout())
-  }
-
   return (
-    <div className="container">
-      {user ? (
-        <div>
-          <Link className="link" to="/">
-            blogs
-          </Link>
-          <Link className="link" to="/users">
-            users
-          </Link>
-        </div>
-      ) : null}
+    <div className="container mb-5">
+      <NavigationMenu user={user} />
       <Notification />
       {!user ? (
         <Login />
       ) : (
         <div>
-          <div>
-            <h2>Blogs</h2>
-            <p>
-              {user.name} logged in &nbsp;
-              <button onClick={() => handleLogout()}>logout</button>
-            </p>
-          </div>
-
+          <h1 className="mt-1 mb-5">Blogs</h1>
           <Routes>
             <Route
               path="/blogs/:id"

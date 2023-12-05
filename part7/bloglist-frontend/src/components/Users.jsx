@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import usersService from '../services/users'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import Table from 'react-bootstrap/Table'
 
 const Users = ({ users, setUsers }) => {
   useEffect(() => {
@@ -15,7 +16,7 @@ const Users = ({ users, setUsers }) => {
     <div>
       <h2>Users</h2>
 
-      <table className="table">
+      <Table>
         <thead>
           <tr>
             <th>Name</th>
@@ -35,7 +36,7 @@ const Users = ({ users, setUsers }) => {
             )
           })}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }

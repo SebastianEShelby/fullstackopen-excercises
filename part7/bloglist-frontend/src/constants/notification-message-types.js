@@ -1,6 +1,6 @@
 const NOTIFICATION_MESSAGE_TYPES = {
   success: 'success',
-  error: 'error',
+  error: 'danger',
 }
 
 export default NOTIFICATION_MESSAGE_TYPES

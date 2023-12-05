@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { login } from '../reducers/userReducer'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
 export const Login = () => {
   const [username, setUsername] = useState('')
@@ -14,32 +17,36 @@ export const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleLogin}>
-        <h2>Login to the application</h2>
-        <div>
-          username
-          <input
-            data-testid="username"
+      <Form onSubmit={handleLogin}>
+        <h2 className="mt-5 mb-5">Login to the application</h2>
+        <FloatingLabel
+          controlId="usernameInput"
+          label="Username"
+          className="mb-3"
+        >
+          <Form.Control
             type="text"
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          password
-          <input
-            data-testid="password"
+        </FloatingLabel>
+
+        <FloatingLabel
+          controlId="passwordInput"
+          label="Password"
+          className="mb-3"
+        >
+          <Form.Control
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button data-testid="login-button" type="submit">
-          login
-        </button>
-      </form>
+        </FloatingLabel>
+
+        <Button type="submit">Login</Button>
+      </Form>
     </>
   )
 }

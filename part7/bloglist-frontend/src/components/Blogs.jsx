@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import Blog from './Blog'
+import { useEffect, useRef } from 'react'
 import CreateBlog from './CreateBlog'
 import Togglable from './Togglable'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from '../reducers/blogsReducer'
 import { createSelector } from '@reduxjs/toolkit'
 import { Link } from 'react-router-dom'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 const Blogs = () => {
   const blogsSelector = (state) => state.blogs
@@ -21,25 +21,26 @@ const Blogs = () => {
     dispatch(initializeBlogs())
   }, [])
 
-  const blogStyle = {
-    padding: '10px 10px',
-    border: '1px solid black',
-    marginBottom: 5,
+  const BlogsList = () => {
+    if (!isBlogs) return null
+    return (
+      <ListGroup>
+        {sortedBlogs.map((blog) => (
+          <ListGroup.Item key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    )
   }
 
   return (
-    <div data-testid="blogs">
+    <div>
       <Togglable buttonLabel="create new blog" ref={togglableBlogRef}>
         <CreateBlog togglableBlogRef={togglableBlogRef} />
       </Togglable>
       <br />
-      {isBlogs
-        ? sortedBlogs.map((blog) => (
-            <div key={blog.id} style={blogStyle}>
-              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-            </div>
-          ))
-        : null}
+      {BlogsList()}
     </div>
   )
 }

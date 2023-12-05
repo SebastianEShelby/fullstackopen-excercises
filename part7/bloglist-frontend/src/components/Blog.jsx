@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   updateBlog,
   deleteBlog,
@@ -7,6 +7,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { sendNotification } from '../reducers/notificationReducer'
 import NOTIFICATION_MESSAGE_TYPES from '../constants/notification-message-types'
+import Button from 'react-bootstrap/Button'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Form from 'react-bootstrap/Form'
+import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
 const Blog = ({ blog }) => {
   const userSelector = (state) => state.user
@@ -53,54 +57,64 @@ const Blog = ({ blog }) => {
 
   return (
     <div>
-      <h2>
-        {blog.title} {blog.author}
-      </h2>
-      <div>
+      <h2 className="mt-5 mb-4">{`"${blog.title}" by "${blog.author}"`}</h2>
+      <ListGroup>
         {blog.url ? (
-          <p>
-            Url:<a href={blog.url}> {blog.url}</a>
-          </p>
+          <ListGroup.Item>
+            <b>Url:</b>
+            <a href={blog.url}> {blog.url}</a>
+          </ListGroup.Item>
         ) : null}
         {blog.likes !== (null || undefined) ? (
-          <p>
-            Likes: {blog.likes}
+          <ListGroup.Item>
+            <b>Likes:</b> {blog.likes}
             &nbsp;
-            <button data-testid="update-blog-likes" onClick={increaseBlogLikes}>
+            <Button variant="outline-primary" onClick={increaseBlogLikes}>
               like
-            </button>
-          </p>
+            </Button>
+          </ListGroup.Item>
         ) : null}
-        {blog.user.name ? <p>User: {blog.user.name}</p> : null}
-        {blog.user.username === user.username ? (
-          <button
-            data-testid="remove-blog-button"
-            style={{ color: 'red' }}
-            onClick={removeBlog}
+        {blog.user.name ? (
+          <ListGroup.Item>
+            {' '}
+            <b>User:</b> {blog.user.name}{' '}
+          </ListGroup.Item>
+        ) : null}
+      </ListGroup>
+      {blog.user.username === user.username ? (
+        <Button className="mt-3" variant="outline-danger" onClick={removeBlog}>
+          remove
+        </Button>
+      ) : null}
+      <div className="mt-5">
+        <h3 className="mb-4">Comments</h3>
+        <Form onSubmit={handleAddComment}>
+          <FloatingLabel
+            controlId="commentInput"
+            label="Comment"
+            className="mb-3"
           >
-            remove
-          </button>
-        ) : null}
-      </div>
-      <div>
-        <h3>comments</h3>
-        <form onSubmit={handleAddComment}>
-          Title:
-          <input
-            type="text"
-            name="comment"
-            value={comment}
-            onChange={({ target }) => setComment(target.value)}
-          />
-          <button type="submit">add comment</button>
-        </form>
-        {blog.comments && blog.comments.length > 0 ? (
-          <ul>
-            {blog.comments.map((comment, i) => (
-              <li key={i}>{comment}</li>
-            ))}
-          </ul>
-        ) : null}
+            <Form.Control
+              type="text"
+              name="comment"
+              value={comment}
+              onChange={({ target }) => setComment(target.value)}
+              placeholder="A valuable comment!"
+            />
+          </FloatingLabel>
+          <Button variant="outline-primary" type="submit">
+            add comment
+          </Button>
+        </Form>
+        <div className="mt-5">
+          {blog.comments && blog.comments.length > 0 ? (
+            <ListGroup>
+              {blog.comments.map((comment, i) => (
+                <ListGroup.Item key={i}>{comment}</ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : null}
+        </div>
       </div>
     </div>
   )
