@@ -46,7 +46,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className="container">
       {user ? (
         <div>
           <Link className="link" to="/">
@@ -87,7 +87,7 @@ const App = () => {
           </Routes>
         </div>
       )}
-    </>
+    </div>
   )
 }
 
